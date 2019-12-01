@@ -21,8 +21,6 @@ class _MembersPageState extends State<MembersPage> {
 
   ConfirmationDialog memberRemovalCheck = new ConfirmationDialog();
   PopUpBox popUpBox = new PopUpBox();
-  List memberDetails;
-  String fileContent;
 
   void test() {
     Members members = new Members();
@@ -42,28 +40,8 @@ class _MembersPageState extends State<MembersPage> {
     }
     members.setMembers(memberList);
     MembersJsonEncoder().encode(members);
+    setState(() {});
   }
-
-//  Future removeData(
-//      String name, String email, String position, String gender) async {
-////    Member member = new Member();
-////    member.name = name;
-////    member.email = email;
-////    member.position = position;
-////    member.gender = gender;
-////    member.removeMember("members", "members.txt");
-//    await fileStream.readContent("members/members.txt").then((c) {
-//      fileContent = c;
-//    });
-//    String data = '$name,$email,$position,$gender\n';
-//    print("--------------------");
-//    print(data);
-//    print("--------------------");
-//    print(fileContent.replaceAll(data, ""));
-//    print("--------------------");
-//    fileStream.writeContent(
-//        "members", "members.txt", fileContent.replaceAll(data, ""), false);
-//  }
 
   Future<List> setMembers() async {
     members = await _memberController.updateView();
@@ -79,7 +57,9 @@ class _MembersPageState extends State<MembersPage> {
         actions: <Widget>[
           FlatButton(
             textColor: Colors.white,
-            onPressed: () {test();},
+            onPressed: () {
+              test();
+            },
             child: Text("reset"),
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
@@ -163,16 +143,11 @@ class _MembersPageState extends State<MembersPage> {
                                             "This will permanently remove the member");
                                     print("STATUS IS $action");
                                     if (action == "ACCEPT") {
-//                                      await removeData(
-//                                          snapshot.data[index].split(",")[0],
-//                                          snapshot.data[index].split(",")[1],
-//                                          snapshot.data[index].split(",")[2],
-//                                          snapshot.data[index].split(",")[3]);
+                                      await _memberController
+                                          .removerMember(snapshot.data[index]);
                                     }
                                     setState(() {
-                                      if (action == "ACCEPT") {
-                                        snapshot.data.removeAt(index);
-                                      }
+                                      if (action == "ACCEPT") {}
                                     });
                                   }),
                             ],

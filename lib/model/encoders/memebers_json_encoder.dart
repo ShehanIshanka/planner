@@ -14,11 +14,11 @@ class MembersJsonEncoder {
   }
 
   void membersEncode(Members members, Map<String, List<String>> membersMap) {
-    List<String> memberList = new List();
+    List<String> memberFileList = new List();
     for (Member currentMember in members.getMembers()) {
       _memberJsonEncoder.encode(currentMember);
-      memberList.add(currentMember.getFilename());
+      memberFileList.add(currentMember.getFilename());
     }
-    membersMap["files"] = memberList;
+    membersMap["files"] = memberFileList;
   }
 }

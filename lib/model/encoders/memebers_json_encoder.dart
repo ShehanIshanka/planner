@@ -8,13 +8,13 @@ class MembersJsonEncoder {
   MemberJsonEncoder _memberJsonEncoder = new MemberJsonEncoder();
 
   void encode(Members members) {
-    Map<String, List<String>> membersMap;
+    Map<String, List<String>> membersMap = new Map();
     membersEncode(members, membersMap);
-    _jsonSerDe.toJson("data", "member.txt", membersMap);
+    _jsonSerDe.toJson("data", "members.txt", membersMap);
   }
 
   void membersEncode(Members members, Map<String, List<String>> membersMap) {
-    List<String> memberList;
+    List<String> memberList = new List();
     for (Member currentMember in members.getMembers()) {
       _memberJsonEncoder.encode(currentMember);
       memberList.add(currentMember.getFilename());

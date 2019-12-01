@@ -9,16 +9,19 @@ class MembersJsonDecoder {
 
   Future<Members> decode(String filename) async {
     Members members = new Members();
-    Map<String, List<String>> membersMap;
-    await _jsonSerDe.fromJson("data/" + filename).then((onValue) {
-      membersMap = onValue;
-    });
-    membersDecode(members, membersMap);
+    Map<String, dynamic> membersMap = new Map();
+    membersMap = await _jsonSerDe.fromJson("data/" + filename);
+    if (membersMap == null) {
+      return null;
+    }
+    await membersDecode(members, membersMap);
+    return members;
   }
 
   Future membersDecode(
-      Members members, Map<String, List<String>> membersMap) async {
-    List<Member> memberList;
+      Members members, Map<String, dynamic> membersMap) async {
+
+    List<Member> memberList = new List();
     for (String currentFile in membersMap["files"]) {
       await _memberJsonDecoder.decode("members/" + currentFile).then((member) {
         memberList.add(member);

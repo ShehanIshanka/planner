@@ -15,6 +15,9 @@ class JsonSerDe {
     await _fileStream.readContent(filename).then((c) {
       fileContent = c;
     });
+    if (fileContent == "Error!") {
+      return null;
+    }
     Map<String, dynamic> jsonMap = jsonDecode(fileContent);
     return jsonMap;
   }

@@ -5,7 +5,7 @@ class MemberJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
   void encode(Member member) {
-    Map<String, String> memberMap;
+    Map<String, String> memberMap = new Map();
     if (member.getChanged()) {
       memberEncode(member, memberMap);
       _jsonSerDe.toJson("members", member.getFilename(), memberMap);

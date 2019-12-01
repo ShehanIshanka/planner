@@ -4,7 +4,7 @@ import 'package:planner/model/decoders/members_json_decoder.dart';
 import 'package:planner/model/encoders/memebers_json_encoder.dart';
 import 'package:planner/utils/file/file_stream.dart';
 
-class MemberDataProvider {
+class MemberDataExchanger {
   MembersJsonDecoder _membersJsonDecoder = new MembersJsonDecoder();
   MembersJsonEncoder _membersJsonEncoder = new MembersJsonEncoder();
   FileStream _fileStream = new FileStream();
@@ -27,6 +27,25 @@ class MemberDataProvider {
     _membersJsonEncoder.encode(members);
     await _fileStream.removeFile("members", member.getFilename());
   }
+
+  void addMemberData(Members members,Member member){
+    List<Member> memberList = members.getMembers();
+    member.setFilename(member.getName()+".txt");
+    member.setChanged(true);
+    memberList.add(member);
+    members.setMembers(memberList);
+    _membersJsonEncoder.encode(members);
+  }
+
+  void editMemberData(Members members,Member member){
+    List<Member> memberList = members.getMembers();
+    memberList.remove(member);
+    member.setChanged(true);
+    memberList.add(member);
+    members.setMembers(memberList);
+    _membersJsonEncoder.encode(members);
+  }
+
 
   Members handleNullMember() {
     Members members = new Members();

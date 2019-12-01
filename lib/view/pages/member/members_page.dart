@@ -6,9 +6,8 @@ import 'package:planner/model/beans/member/member.dart';
 import 'package:planner/model/beans/member/members.dart';
 import 'package:planner/view/widgets/popup_box.dart';
 import 'package:planner/view/widgets/side_drawer.dart';
-import 'package:planner/view/widgets/confirmation_box.dart';
+import 'package:planner/view/widgets/confirmation_dialog.dart';
 import 'package:planner/model/encoders/memebers_json_encoder.dart';
-//import 'member_registration.dart';
 
 class MembersPage extends StatefulWidget {
   @override
@@ -18,7 +17,6 @@ class MembersPage extends StatefulWidget {
 class _MembersPageState extends State<MembersPage> {
   Members members;
   MemberController _memberController = new MemberController();
-
   ConfirmationDialog memberRemovalCheck = new ConfirmationDialog();
   PopUpBox popUpBox = new PopUpBox();
 
@@ -73,102 +71,89 @@ class _MembersPageState extends State<MembersPage> {
             }
             return SafeArea(
                 child: ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding:
                       const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-                  child: Card(
-                    child: Container(
-                      child: ListTile(
-                          onTap: () {
-                            popUpBox.confirmDialog(
-                                context, snapshot.data[index]);
-                          },
-                          title: Text(
-                            snapshot.data[index].getName(),
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          leading: Container(
-                            padding: EdgeInsets.only(right: 12.0),
-                            decoration: new BoxDecoration(
-                                border: new Border(
-                                    right: new BorderSide(
-                                        width: 1.0, color: Colors.black12))),
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  'assets/${snapshot.data[index].getGender()}.png'),
-                            ),
-                          ),
-                          subtitle: Text(snapshot.data[index].getPosition(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontFamily: 'Raleway')),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.grey,
-                                ),
-                                onPressed: () async {
-//                                      await Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(
-//                                              builder: (context) =>
-//                                                  MemberRegistration(
-//                                                      member: Member(
-//                                                          snapshot.data[index]
-//                                                              .split(",")[0],
-//                                                          snapshot.data[index]
-//                                                              .split(",")[1],
-//                                                          snapshot.data[index]
-//                                                              .split(",")[2],
-//                                                          snapshot.data[index]
-//                                                              .split(",")[3]),
-//                                                      status: "edit")));
-                                },
+                      child: Card(
+                        child: Container(
+                          child: ListTile(
+                              onTap: () {
+                                popUpBox.confirmDialog(
+                                    context, snapshot.data[index]);
+                              },
+                              title: Text(
+                                snapshot.data[index].getName(),
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.grey,
+                              leading: Container(
+                                padding: EdgeInsets.only(right: 12.0),
+                                decoration: new BoxDecoration(
+                                    border: new Border(
+                                        right: new BorderSide(
+                                            width: 1.0,
+                                            color: Colors.black12))),
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                      'assets/${snapshot.data[index]
+                                          .getGender()}.png'),
+                                ),
+                              ),
+                              subtitle: Text(snapshot.data[index].getPosition(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontFamily: 'Raleway')),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () async {
+                                      await _memberController
+                                          .navigateToMemberRegistrationPage(
+                                          context, "edit", snapshot.data[index]);
+                                    },
                                   ),
-                                  onPressed: () async {
-                                    String action =
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () async {
+                                        String action =
                                         await memberRemovalCheck.confirmDialog(
                                             context,
                                             "Remove this member?",
                                             "This will permanently remove the member");
-                                    print("STATUS IS $action");
-                                    if (action == "ACCEPT") {
-                                      await _memberController
-                                          .removerMember(snapshot.data[index]);
-                                    }
-                                    setState(() {
-                                      if (action == "ACCEPT") {}
-                                    });
-                                  }),
-                            ],
-                          )),
-                    ),
-                  ),
-                );
-              },
-            ));
+                                        print("STATUS IS $action");
+                                        if (action == "ACCEPT") {
+                                          await _memberController
+                                              .removerMember(
+                                              snapshot.data[index]);
+                                        }
+                                        setState(() {
+                                          if (action == "ACCEPT") {}
+                                        });
+                                      }),
+                                ],
+                              )),
+                        ),
+                      ),
+                    );
+                  },
+                ));
           }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.person_add),
         foregroundColor: Colors.black54,
         backgroundColor: Colors.white,
-        onPressed: () {
-//          Navigator.pushNamed(context, "/members_registration");
-//          Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                  builder: (context) => MemberRegistration(
-//                      member: Member("", "", "", "male"), status: "new")));
+        onPressed: () async {
+          await _memberController.navigateToMemberRegistrationPage(
+              context, "new", new Member());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

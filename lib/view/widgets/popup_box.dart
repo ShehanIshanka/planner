@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:planner/model/beans/member/member.dart';
 
 class PopUpBox {
-  void confirmDialog(BuildContext context, String data) {
-    List details = data.split(",");
-    String name = details[0];
-    String email = details[1];
-    String position = details[2];
-    String gender = details[3];
+  void confirmDialog(BuildContext context, Member member) {
+    String name = member.getName();
+    String email = member.getEmail();
+    String position = member.getPosition();
+    String gender = member.getGender();
 
     showDialog(
       context: context,
@@ -26,8 +26,7 @@ class PopUpBox {
                   child: Row(
                     children: <Widget>[
                       Icon(Icons.person),
-                      Flexible(
-                          child: Text(name, overflow: TextOverflow.fade)),
+                      Flexible(child: Text(name, overflow: TextOverflow.fade)),
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
                   ),
@@ -36,12 +35,10 @@ class PopUpBox {
                   child: Row(
                     children: <Widget>[
                       Icon(Icons.mail),
-                      Flexible(
-                          child: Text(email, overflow: TextOverflow.fade)),
+                      Flexible(child: Text(email, overflow: TextOverflow.fade)),
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
                   ),
-
                 ),
                 Card(
                   child: Row(

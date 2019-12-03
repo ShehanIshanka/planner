@@ -28,24 +28,22 @@ class MemberDataExchanger {
     await _fileStream.removeFile("members", member.getFilename());
   }
 
-  void addMemberData(Members members,Member member){
+  void addMemberData(Members members, Member member) {
     List<Member> memberList = members.getMembers();
-    member.setFilename(member.getName()+".txt");
+    member.setFilename(member.getName() + ".txt");
     member.setChanged(true);
     memberList.add(member);
     members.setMembers(memberList);
     _membersJsonEncoder.encode(members);
   }
 
-  void editMemberData(Members members,Member member){
+  void editMemberData(Members members, Member member, int index) {
     List<Member> memberList = members.getMembers();
-    memberList.remove(member);
+    memberList[index] = member;
     member.setChanged(true);
-    memberList.add(member);
     members.setMembers(memberList);
     _membersJsonEncoder.encode(members);
   }
-
 
   Members handleNullMember() {
     Members members = new Members();

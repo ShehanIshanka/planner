@@ -1,10 +1,10 @@
 class Member {
-  String _name;
-  String _email;
-  String _position;
-  String _gender;
-  String _filename;
-  bool _changed;
+  String _name = "";
+  String _email = "";
+  String _position = "";
+  String _gender = "male";
+  String _filename = "";
+  bool _changed = false;
 
   String getName() {
     return _name;

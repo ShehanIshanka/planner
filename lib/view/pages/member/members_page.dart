@@ -115,7 +115,7 @@ class _MembersPageState extends State<MembersPage> {
                                     onPressed: () async {
                                       await _memberController
                                           .navigateToMemberRegistrationPage(
-                                          context, "edit", snapshot.data[index]);
+                                          context, "edit", snapshot.data[index],index: index);
                                     },
                                   ),
                                   IconButton(

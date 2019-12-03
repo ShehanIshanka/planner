@@ -16,7 +16,7 @@ class MemberController {
   }
 
   Future navigateToMemberRegistrationPage(
-      BuildContext context, String status,Member member) async {
+      BuildContext context, String status, Member member,{int index=1}) async {
     Member resultMember;
     if (status == "new") {
       resultMember = await Navigator.push(
@@ -24,17 +24,20 @@ class MemberController {
           MaterialPageRoute(
               builder: (context) =>
                   MemberRegistration(member: member, status: status)));
-      _memberDataExchanger.addMemberData(_members,resultMember);
+      if (resultMember != null) {
+        _memberDataExchanger.addMemberData(_members, resultMember);
+      }
     } else if (status == "edit") {
       resultMember = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   MemberRegistration(member: member, status: status)));
-      _memberDataExchanger.editMemberData(_members,resultMember);
+      if (resultMember != null) {
+        _memberDataExchanger.editMemberData(_members, resultMember,index);
+      }
     }
   }
-  
 
   void removerMember(Member member) async {
     await _memberDataExchanger.removeMemberData(_members, member);

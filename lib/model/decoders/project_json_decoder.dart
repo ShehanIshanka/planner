@@ -15,25 +15,26 @@ class ProjectJsonDecoder {
     return project;
   }
 
-  void projectDecode(Project project, Map<String, dynamic> projectMap) {
+  void projectDecode(Project project, Map<String, dynamic> projectMap) async {
     project.setProjectName(projectMap["projectName"]);
-    project
-        .setProjectMembers(projectMemberDecode(projectMap["projectMembers"]));
+    await projectMemberDecode(projectMap["projectMembers"]).then((onValue) {
+      project.setProjectMembers(onValue);
+    });
     project.setStartDate(DateTime.parse(projectMap["startDate"]));
     project.setEndDate(DateTime.parse(projectMap["endDate"]));
     project.setFilename(projectMap["filename"]);
     project.setChanged(false);
   }
 
-  List<ProjectMember> projectMemberDecode(
-      List<Map<String, dynamic>> projectMemberMap) {
+  Future<List<ProjectMember>> projectMemberDecode(
+      List<dynamic> projectMemberMap) async {
     List<ProjectMember> projectMembersList = new List();
     for (Map<String, dynamic> currentMemberMap in projectMemberMap) {
       ProjectMember projectMember = new ProjectMember();
       projectMember.setName(currentMemberMap["name"]);
-      projectMember.setLeaves(currentMemberMap["leaves"]);
-      projectMember.setTasks(currentMemberMap["tasks"]);
-      projectMember.setTasksTime(currentMemberMap["tasksTime"]);
+      projectMember.setLeaves(currentMemberMap["leaves"].cast<DateTime>());
+      projectMember.setTasks(currentMemberMap["tasks"].cast<String>());
+      projectMember.setTasksTime(currentMemberMap["tasksTime"].cast<double>());
       projectMembersList.add(projectMember);
     }
     return projectMembersList;

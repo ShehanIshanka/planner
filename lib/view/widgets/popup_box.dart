@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:planner/model/beans/member/member.dart';
 
 class PopUpBox {
-  void confirmDialog(BuildContext context, Member member) {
+  void showMember(BuildContext context, Member member) {
     String name = member.getName();
     String email = member.getEmail();
     String position = member.getPosition();

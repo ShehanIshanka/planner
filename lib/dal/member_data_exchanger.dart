@@ -49,6 +49,7 @@ class MemberDataExchanger {
     Members members = new Members();
     List<Member> memberList = new List();
     Member _member = new Member();
+
     _member.setName("example");
     _member.setEmail("example@gmail.com");
     _member.setPosition("example");

@@ -22,7 +22,7 @@ class SideDrawer extends StatelessWidget {
               title: Text('Projects'),
               onTap: () {
 //                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, "/home");
+                Navigator.pushReplacementNamed(context, "/projects");
               },
             ),
             ListTile(

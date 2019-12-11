@@ -14,12 +14,12 @@ class ProjectsJsonEncoder {
   }
 
   void projectsEncode(
-      Projects projects, Map<String, List<String>> projectsmap) {
+      Projects projects, Map<String, List<String>> projectsMap) {
     List<String> projectFileList = new List();
     for (Project currentProject in projects.getProjects()) {
       _projectsJsonEncoder.encode(currentProject);
       projectFileList.add(currentProject.getFilename());
     }
-    projectsmap["files"] = projectFileList;
+    projectsMap["files"] = projectFileList;
   }
 }

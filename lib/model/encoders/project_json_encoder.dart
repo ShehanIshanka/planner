@@ -6,7 +6,7 @@ class ProjectJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
   void encode(Project project) {
-    Map<String, String> projectMap = new Map();
+    Map<String, dynamic> projectMap = new Map();
     if (project.getChanged()) {
       projectEncode(project, projectMap);
       _jsonSerDe.toJson("projects", project.getFilename(), projectMap);
@@ -23,13 +23,14 @@ class ProjectJsonEncoder {
     projectMap["filename"] = project.getFilename();
   }
 
-  List<Map<String, dynamic>> projectMemberEncode(
+  List<Map<dynamic, dynamic>> projectMemberEncode(
       List<ProjectMember> projectMembersList) {
-    List<Map<String, dynamic>> encodedProjectMembersList = new List();
+    List<Map<dynamic, dynamic>> encodedProjectMembersList = new List();
     for (ProjectMember projectMember in projectMembersList) {
       Map projectMemberMap = new Map();
       projectMemberMap["name"] = projectMember.getName();
-      projectMemberMap["leaves"] = projectMember.getLeaves();
+      projectMemberMap["leaves"] =
+          projectMember.getLeaves().map((date) => date.toString()).toList();
       projectMemberMap["tasks"] = projectMember.getTasks();
       projectMemberMap["tasksTime"] = projectMember.getTasksTime();
       encodedProjectMembersList.add(projectMemberMap);

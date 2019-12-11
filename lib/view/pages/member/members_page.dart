@@ -80,7 +80,7 @@ class _MembersPageState extends State<MembersPage> {
                         child: Container(
                           child: ListTile(
                               onTap: () {
-                                popUpBox.confirmDialog(
+                                popUpBox.showMember(
                                     context, snapshot.data[index]);
                               },
                               title: Text(

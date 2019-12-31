@@ -1,8 +1,8 @@
 class ProjectMember {
   String _name = "";
   List<DateTime> _leaves = new List();
-  List<String> _tasks = new List();
-  List<double> _tasksTime = new List();
+  List<String> _tasks = ["ssssssssssssssssssssssssss","ss"];
+  List<double> _tasksTime = [1.0,2.0];
   bool _changed = false;
 
   void setName(String name) {

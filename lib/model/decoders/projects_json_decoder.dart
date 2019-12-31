@@ -24,8 +24,8 @@ class ProjectsJsonDecoder {
     for (String currentFile in projectsMap["files"]) {
       await _projectJsonDecoder
           .decode("projects/" + currentFile)
-          .then((member) {
-        projectList.add(member);
+          .then((project) {
+        projectList.add(project);
       });
     }
     projects.setProjects(projectList);

@@ -37,8 +37,8 @@ class FileStream {
         myDir.create(recursive: true);
       }
     });
-    print("File Name:" + filename);
-    print("Contents:" + data);
+    print("File Name writing:" + filename);
+    print("Contents writing:" + data);
     file.writeAsString('$data');
   }
 

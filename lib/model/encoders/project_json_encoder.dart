@@ -5,7 +5,7 @@ import 'package:planner/utils/json/json_serde.dart';
 class ProjectJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
-  void encode(Project project) {
+  void encode(Project project)async {
     Map<String, dynamic> projectMap = new Map();
     if (project.getChanged()) {
       projectEncode(project, projectMap);
@@ -20,6 +20,8 @@ class ProjectJsonEncoder {
         projectMemberEncode(project.getProjectMembers());
     projectMap["startDate"] = project.getStartDate().toString();
     projectMap["endDate"] = project.getEndDate().toString();
+    projectMap["holidays"] =
+        project.getHolidays().map((date) => date.toString()).toList();
     projectMap["filename"] = project.getFilename();
   }
 

@@ -32,9 +32,10 @@ class _ProjectsPageState extends State<ProjectsPage> {
     projectMember.setTasks(["example task"]);
     projectMember.setTasksTime([2]);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1000; i < 1002; i++) {
       Project project = new Project();
       project.setProjectName(i.toString());
+      project.setHolidays([new DateTime.now()]);
       project.setProjectMembers([projectMember]);
       project.setChanged(true);
       project.setFilename(i.toString() + ".txt");
@@ -47,6 +48,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
 
   Future<List> setProjects() async {
     projects = await _projectController.updateView();
+    print("data/");
+    print(projects.getProjects());
+    print("data/");
     return projects.getProjects();
   }
 
@@ -109,7 +113,6 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     child: Container(
                       child: ListTile(
                           onTap: () {
-                            popUpBox.showMember(context, snapshot.data[index]);
                           },
                           title: Text(
                             snapshot.data[index].getProjectName(),
@@ -155,7 +158,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                 ),
                                 onPressed: () async {
 //                                      await _projectController
-//                                          .navigateToMemberRegistrationPage(
+//                                          .navigateToProjectRegistrationPage(
 //                                          context, "edit", snapshot.data[index],index: index);
                                 },
                               ),
@@ -193,8 +196,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
         foregroundColor: Colors.black54,
         backgroundColor: Colors.white,
         onPressed: () async {
-//          await _projectController.navigateToMemberRegistrationPage(
-//              context, "new", new Project());
+          await _projectController.navigateToProjectRegistrationPage(
+              context, "new", new Project());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

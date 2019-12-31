@@ -25,7 +25,7 @@ class _MembersPageState extends State<MembersPage> {
     List<Member> memberList = new List();
     for (int i = 0; i < 4; i++) {
       Member member = new Member();
-      member.setName(i.toString());
+      member.setName(i.toString()+"member");
       member.setEmail(i.toString() + "@gmail.com");
       member.setGender("female");
       if (i % 2 == 0) {

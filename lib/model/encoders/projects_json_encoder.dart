@@ -5,7 +5,7 @@ import 'package:planner/utils/json/json_serde.dart';
 
 class ProjectsJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
-  ProjectJsonEncoder _projectsJsonEncoder = new ProjectJsonEncoder();
+  ProjectJsonEncoder _projectJsonEncoder = new ProjectJsonEncoder();
 
   void encode(Projects projects) {
     Map<String, List<String>> projectsMap = new Map();
@@ -17,7 +17,7 @@ class ProjectsJsonEncoder {
       Projects projects, Map<String, List<String>> projectsMap) {
     List<String> projectFileList = new List();
     for (Project currentProject in projects.getProjects()) {
-      _projectsJsonEncoder.encode(currentProject);
+      _projectJsonEncoder.encode(currentProject);
       projectFileList.add(currentProject.getFilename());
     }
     projectsMap["files"] = projectFileList;

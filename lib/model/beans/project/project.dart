@@ -5,6 +5,7 @@ class Project {
   List<ProjectMember> _projectMembers = new List();
   DateTime _startDate = new DateTime.now();
   DateTime _endDate = new DateTime.now().add(new Duration(days: 14));
+  List<DateTime> _holidays = new List();
   String _filename = "";
   bool _changed = false;
 
@@ -38,6 +39,14 @@ class Project {
 
   DateTime getEndDate() {
     return this._endDate;
+  }
+
+  void setHolidays(List<DateTime> holidays) {
+    this._holidays = holidays;
+  }
+
+  List<DateTime> getHolidays() {
+    return this._holidays;
   }
 
   String getFilename() {

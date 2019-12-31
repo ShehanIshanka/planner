@@ -3,10 +3,21 @@ import 'package:planner/model/beans/project/project_member.dart';
 import 'package:planner/model/beans/project/projects.dart';
 import 'package:planner/model/decoders/projects_json_decoder.dart';
 import 'package:planner/model/encoders/projects_json_encoder.dart';
+import 'package:planner/utils/json/json_serde.dart';
 
 class ProjectDataExchanger {
   ProjectsJsonDecoder _projectsJsonDecoder = new ProjectsJsonDecoder();
   ProjectsJsonEncoder _projectsJsonEncoder = new ProjectsJsonEncoder();
+  JsonSerDe _jsonSerDe = new JsonSerDe();
+
+  Future setProjectFileName(Project project)async{
+    int projectId;
+    await getProjectId().then((onValue) {
+      projectId = onValue;
+    });
+    project.setFilename(projectId.toString()+".txt");
+    await setNewProjectId(projectId);
+  }
 
   Future<Projects> getProjectData() async {
     Projects _projects;
@@ -17,6 +28,41 @@ class ProjectDataExchanger {
       return handleNullProject();
     }
     return _projects;
+  }
+
+  Future<void> addProjectData(Projects projects, Project project) async {
+    List<Project> projectList = projects.getProjects();
+    project.setChanged(true);
+    projectList.add(project);
+    projects.setProjects(projectList);
+    _projectsJsonEncoder.encode(projects);
+  }
+
+  void editProjectData(Projects projects, Project project, int index) {
+    List<Project> projectList = projects.getProjects();
+    projectList[index]=project;
+    project.setChanged(true);
+    projects.setProjects(projectList);
+    _projectsJsonEncoder.encode(projects);
+  }
+
+  Future setNewProjectId(int id)async{
+    Map<String, dynamic> projectIdMap =new Map();
+    projectIdMap["projectId"]=id+1;
+    _jsonSerDe.toJson("data", "projectId.txt", projectIdMap);
+  }
+
+  Future<int> getProjectId() async{
+    Map<String, dynamic> projectIdMap = new Map();
+    await _jsonSerDe.fromJson("data/projectId.txt").then((onValue) {
+      projectIdMap = onValue;
+    });
+    print(projectIdMap);
+    if(projectIdMap!=null){
+      return projectIdMap["projectId"];
+    }else{
+      return 0;
+    }
   }
 
   Projects handleNullProject() {

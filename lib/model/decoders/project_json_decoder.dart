@@ -22,6 +22,7 @@ class ProjectJsonDecoder {
     });
     project.setStartDate(DateTime.parse(projectMap["startDate"]));
     project.setEndDate(DateTime.parse(projectMap["endDate"]));
+    project.setHolidays(projectMap["holidays"].cast<DateTime>());
     project.setFilename(projectMap["filename"]);
     project.setChanged(false);
   }

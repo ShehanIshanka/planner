@@ -10,13 +10,12 @@ class ProjectDataExchanger {
   ProjectsJsonEncoder _projectsJsonEncoder = new ProjectsJsonEncoder();
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
-  Future setProjectFileName(Project project)async{
+  Future setProjectFileName(Project project) async {
     int projectId;
     await getProjectId().then((onValue) {
       projectId = onValue;
     });
-    project.setFilename(projectId.toString()+".txt");
-    await setNewProjectId(projectId);
+    project.setFilename(projectId.toString() + ".txt");
   }
 
   Future<Projects> getProjectData() async {
@@ -31,6 +30,8 @@ class ProjectDataExchanger {
   }
 
   Future<void> addProjectData(Projects projects, Project project) async {
+    await setNewProjectId(
+        int.parse(project.getFilename().replaceAll(".txt", "")));
     List<Project> projectList = projects.getProjects();
     project.setChanged(true);
     projectList.add(project);
@@ -40,27 +41,27 @@ class ProjectDataExchanger {
 
   void editProjectData(Projects projects, Project project, int index) {
     List<Project> projectList = projects.getProjects();
-    projectList[index]=project;
+    projectList[index] = project;
     project.setChanged(true);
     projects.setProjects(projectList);
     _projectsJsonEncoder.encode(projects);
   }
 
-  Future setNewProjectId(int id)async{
-    Map<String, dynamic> projectIdMap =new Map();
-    projectIdMap["projectId"]=id+1;
+  Future setNewProjectId(int id) async {
+    Map<String, dynamic> projectIdMap = new Map();
+    projectIdMap["projectId"] = id + 1;
     _jsonSerDe.toJson("data", "projectId.txt", projectIdMap);
   }
 
-  Future<int> getProjectId() async{
+  Future<int> getProjectId() async {
     Map<String, dynamic> projectIdMap = new Map();
     await _jsonSerDe.fromJson("data/projectId.txt").then((onValue) {
       projectIdMap = onValue;
     });
     print(projectIdMap);
-    if(projectIdMap!=null){
+    if (projectIdMap != null) {
       return projectIdMap["projectId"];
-    }else{
+    } else {
       return 0;
     }
   }

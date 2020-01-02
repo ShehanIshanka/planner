@@ -3,11 +3,14 @@ import 'package:planner/external/calendarro/date_utils.dart';
 import 'package:flutter/material.dart';
 
 class CalendarroDayItem extends StatelessWidget {
-  CalendarroDayItem({this.date, this.calendarroState, this.onTap});
+  CalendarroDayItem(
+      {this.date, this.disabledDates, this.calendarroState, this.onTap});
 
   DateTime date;
   CalendarroState calendarroState;
   DateTimeCallback onTap;
+  List<DateTime> disabledDates;
+  bool enabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +35,24 @@ class CalendarroDayItem extends StatelessWidget {
 
     return Expanded(
         child: GestureDetector(
-          child: Container(
-              height: 40.0,
-              decoration: boxDecoration,
-              child: Center(
-                  child: Text(
-                    "${date.day}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: textColor),
-                  ))),
-          onTap: handleTap,
-          behavior: HitTestBehavior.translucent,
-        ));
+      child: Container(
+          height: 40.0,
+          decoration: boxDecoration,
+          child: Center(
+              child: Text(
+            "${date.day}",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: textColor),
+          ))),
+      onTap: () {
+        if (disabledDates != null && disabledDates.contains(date)) {
+          return null;
+        } else {
+          handleTap();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+    ));
   }
 
   void handleTap() {

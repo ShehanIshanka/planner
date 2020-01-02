@@ -24,9 +24,13 @@ class CalendarroPage extends StatelessWidget {
     "December"
   ];
   int startDayOffset;
+  List<DateTime> disabledDates;
 
   CalendarroPage(
-      {this.pageStartDate, this.pageEndDate, this.weekdayLabelsRow}) {
+      {this.pageStartDate,
+      this.pageEndDate,
+      this.disabledDates,
+      this.weekdayLabelsRow}) {
     startDayOffset = pageStartDate.weekday - DateTime.monday;
   }
 
@@ -43,14 +47,16 @@ class CalendarroPage extends StatelessWidget {
     rows.add(Row(
       children: <Widget>[
         Text(
-          '${pageStartDate.year} ${months[pageStartDate.month-1]}',
+          '${pageStartDate.year} ${months[pageStartDate.month - 1]}',
           style: TextStyle(fontWeight: FontWeight.bold),
         )
       ],
       mainAxisAlignment: MainAxisAlignment.center,
     ));
 
-    rows.add(Row(children: <Widget>[Text("")],));
+    rows.add(Row(
+      children: <Widget>[Text("")],
+    ));
 
     rows.add(weekdayLabelsRow);
 
@@ -59,7 +65,8 @@ class CalendarroPage extends StatelessWidget {
 
     if (pageEndDate.isAfter(rowLastDayDate)) {
       rows.add(Row(
-          children: buildCalendarRow(context, pageStartDate, rowLastDayDate)));
+          children: buildCalendarRow(
+              context, pageStartDate, rowLastDayDate, disabledDates)));
 
       for (var i = 1; i < MAX_ROWS_COUNT; i++) {
         DateTime nextRowFirstDayDate =
@@ -77,27 +84,32 @@ class CalendarroPage extends StatelessWidget {
         }
 
         rows.add(Row(
-            children: buildCalendarRow(
-                context, nextRowFirstDayDate, nextRowLastDayDate)));
+            children: buildCalendarRow(context, nextRowFirstDayDate,
+                nextRowLastDayDate, disabledDates)));
       }
     } else {
-      rows.add(
-          Row(children: buildCalendarRow(context, pageStartDate, pageEndDate)));
+      rows.add(Row(
+          children: buildCalendarRow(
+              context, pageStartDate, pageEndDate, disabledDates)));
     }
 
     return rows;
   }
 
   List<Widget> buildCalendarRow(
-      BuildContext context, DateTime rowStartDate, DateTime rowEndDate) {
+    BuildContext context,
+    DateTime rowStartDate,
+    DateTime rowEndDate,
+    List<DateTime> disabledDates,
+  ) {
     List<Widget> items = [];
 
     DateTime currentDate = rowStartDate;
     for (int i = 0; i < 7; i++) {
       if (i + 1 >= rowStartDate.weekday && i + 1 <= rowEndDate.weekday) {
         CalendarroState calendarroState = Calendarro.of(context);
-        Widget dayTile = calendarroState.widget.dayTileBuilder
-            .build(context, currentDate, calendarroState.widget.onTap);
+        Widget dayTile = calendarroState.widget.dayTileBuilder.build(
+            context, currentDate, disabledDates, calendarroState.widget.onTap);
         items.add(dayTile);
         currentDate = currentDate.add(Duration(days: 1));
       } else {

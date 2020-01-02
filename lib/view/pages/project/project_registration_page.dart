@@ -72,24 +72,76 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     if (picked != null && picked.length == 2) {
       dateRange = picked;
       selectedDates.clear();
-      setState(() {
-        project.setStartDate(dateRange[0]);
-        project.setEndDate(dateRange[1]);
-      });
+      project.setStartDate(dateRange[0]);
+      project.setEndDate(dateRange[1]);
+      for (ProjectMember currentProjectMember in project.getProjectMembers()) {
+        currentProjectMember.getLeaves().clear();
+        currentProjectMember.setTasksTime(currentProjectMember
+            .getTasksTime()
+            .map((time) => time > calculateWorkingDays(currentProjectMember)
+                ? calculateWorkingDays(currentProjectMember).toDouble()
+                : time)
+            .toList());
+      }
+      setState(() {});
+      _messageBox.showMessage(
+          'Please set holidays, leaves and task times.', _scaffoldKey);
       print('Project Duration Range : $picked');
     }
   }
 
   Future selectHolidays(BuildContext context) async {
     List output = await PopUpBoxCalender()
-        .popUpCalender(context, dateRange, selectedDates);
+        .popUpCalender(context, dateRange, selectedDates, []);
     String action = output[0];
     if (action == "OK") {
       selectedDates = output[1];
-      setState(() {
-        project.setHolidays(selectedDates);
-      });
+      project.setHolidays(selectedDates);
+      for (ProjectMember currentProjectMember in project.getProjectMembers()) {
+        currentProjectMember.setLeaves(currentProjectMember
+            .getLeaves()
+            .toSet()
+            .difference(output[1].toSet())
+            .toList());
+        currentProjectMember.setTasksTime(currentProjectMember
+            .getTasksTime()
+            .map((time) => time > calculateWorkingDays(currentProjectMember)
+                ? calculateWorkingDays(currentProjectMember).toDouble()
+                : time)
+            .toList());
+      }
+      setState(() {});
+      _messageBox.showMessage(
+          'Please check leaves and task times of added project members',
+          _scaffoldKey);
       print('Holidays selected : $selectedDates');
+    }
+  }
+
+  Future selectLeaves(BuildContext context, ProjectMember projectMember) async {
+    List<DateTime> selectedLeaves = project.getHolidays();
+    print(
+        'Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
+    List output = await PopUpBoxCalender().popUpCalender(context, dateRange,
+        selectedLeaves + projectMember.getLeaves(), selectedLeaves);
+    String action = output[0];
+    if (action == "OK") {
+      selectedLeaves =
+          output[1].toSet().difference(selectedLeaves.toSet()).toList();
+      setState(() {
+        projectMember.setLeaves(selectedLeaves);
+        projectMember.setTasksTime(projectMember
+            .getTasksTime()
+            .map((time) => time > calculateWorkingDays(projectMember)
+            ? calculateWorkingDays(projectMember).toDouble()
+            : time)
+            .toList());
+      });
+      _messageBox.showMessage(
+          'Please check task times',
+          _scaffoldKey);
+      print(
+          'Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
     }
   }
 
@@ -130,7 +182,8 @@ class _ProjectRegistration extends State<ProjectRegistration> {
   }
 
   int calculateWorkingDays(ProjectMember projectMember) {
-    return project.getEndDate().difference(project.getStartDate()).inDays -
+    return project.getEndDate().difference(project.getStartDate()).inDays +
+        1 -
         project.getHolidays().length -
         projectMember.getLeaves().length;
   }
@@ -220,7 +273,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                       color: Colors.lightBlue,
                       onPressed: () async {
                         await selectHolidays(context);
-                        project.setHolidays(selectedDates);
+//                        project.setHolidays(selectedDates);
                       },
                       child: new Text("Mark Holidays"))
                 ],
@@ -353,9 +406,9 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                       ),
                                       DataCell(new MaterialButton(
                                           color: Colors.blueGrey,
-                                          onPressed: () {
-//                                      projectRegistrationController
-//                                          .selectHolidays(context);
+                                          onPressed: () async {
+                                            await selectLeaves(
+                                                context, projectMember);
                                           },
                                           child: new Text("Set Leaves"))),
                                     ]))

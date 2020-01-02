@@ -5,7 +5,7 @@ import 'package:planner/utils/json/json_serde.dart';
 class ProjectJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
-  void encode(Project project)async {
+  void encode(Project project){
     Map<String, dynamic> projectMap = new Map();
     if (project.getChanged()) {
       projectEncode(project, projectMap);

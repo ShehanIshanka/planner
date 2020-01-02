@@ -3,7 +3,7 @@ import 'package:planner/external/calendarro/calendarro.dart';
 
 class PopUpBoxCalender {
   Future<List> popUpCalender(BuildContext context, List<DateTime> dateRange,
-      List<DateTime> selectedDates) async {
+      List<DateTime> selectedDates, List<DateTime> disableSelectedDates) async {
     List<DateTime> selectingDates = [...selectedDates];
     List<DateTime> output = [];
     return showDialog<List>(
@@ -31,12 +31,14 @@ class PopUpBoxCalender {
                 children: <Widget>[
                   Expanded(
                     child: Calendarro(
-                        displayMode: DisplayMode.MONTHS,
-                        selectionMode: SelectionMode.MULTI,
-                        onTap: (date) {},
-                        startDate: dateRange[0],
-                        endDate: dateRange[1],
-                        selectedDates: selectingDates),
+                      displayMode: DisplayMode.MONTHS,
+                      selectionMode: SelectionMode.MULTI,
+                      onTap: (date) {},
+                      startDate: dateRange[0],
+                      endDate: dateRange[1],
+                      selectedDates: selectingDates,
+                      disabledDates: disableSelectedDates
+                    ),
                     flex: 1,
                   ),
                 ],

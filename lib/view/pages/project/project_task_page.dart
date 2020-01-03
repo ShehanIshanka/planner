@@ -65,7 +65,7 @@ class _ProjectTaskState extends State<ProjectTask> {
   void initState() {
     _tasks = List.from(projectMember.getTasks());
     _tasksTime = List.from(projectMember.getTasksTime());
-    for (double i = 0.5; i <= projectTime; i = i + 0.5) {
+    for (double i = 0; i <= projectTime; i = i + 0.5) {
       dropDownItems.add(i.toString());
     }
     super.initState();

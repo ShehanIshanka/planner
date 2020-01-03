@@ -22,7 +22,9 @@ class ProjectJsonDecoder {
     });
     project.setStartDate(DateTime.parse(projectMap["startDate"]));
     project.setEndDate(DateTime.parse(projectMap["endDate"]));
-    project.setHolidays(projectMap["holidays"].cast<DateTime>());
+    List<DateTime> holidays = [];
+    projectMap["holidays"].forEach((holiday)=>holidays.add(DateTime.parse(holiday)));
+    project.setHolidays(holidays);
     project.setFilename(projectMap["filename"]);
     project.setChanged(false);
   }
@@ -33,7 +35,9 @@ class ProjectJsonDecoder {
     for (Map<String, dynamic> currentMemberMap in projectMemberMap) {
       ProjectMember projectMember = new ProjectMember();
       projectMember.setName(currentMemberMap["name"]);
-      projectMember.setLeaves(currentMemberMap["leaves"].cast<DateTime>());
+      List<DateTime> leaves = [];
+      currentMemberMap["leaves"].forEach((leave)=>leaves.add(DateTime.parse(leave)));
+      projectMember.setLeaves(leaves);
       projectMember.setTasks(currentMemberMap["tasks"].cast<String>());
       projectMember.setTasksTime(currentMemberMap["tasksTime"].cast<double>());
       projectMembersList.add(projectMember);

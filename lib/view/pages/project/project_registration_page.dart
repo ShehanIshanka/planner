@@ -57,6 +57,8 @@ class _ProjectRegistration extends State<ProjectRegistration> {
         title = "New Project";
       } else if (status == "edit") {
         title = "Edit Project";
+        dateRange = [project.getStartDate(), project.getEndDate()];
+        selectedDates = project.getHolidays();
       }
     });
     super.initState();
@@ -133,13 +135,11 @@ class _ProjectRegistration extends State<ProjectRegistration> {
         projectMember.setTasksTime(projectMember
             .getTasksTime()
             .map((time) => time > calculateWorkingDays(projectMember)
-            ? calculateWorkingDays(projectMember).toDouble()
-            : time)
+                ? calculateWorkingDays(projectMember).toDouble()
+                : time)
             .toList());
       });
-      _messageBox.showMessage(
-          'Please check task times',
-          _scaffoldKey);
+      _messageBox.showMessage('Please check task times', _scaffoldKey);
       print(
           'Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
     }
@@ -341,14 +341,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                             .navigateToProjectTaskPage(
                                                 context,
                                                 projectMember,
-                                                project
-                                                        .getEndDate()
-                                                        .difference(project
-                                                            .getStartDate())
-                                                        .inDays -
-                                                    project
-                                                        .getHolidays()
-                                                        .length);
+                                                calculateWorkingDays(projectMember));
                                       }),
                                       DataCell(
                                         SingleChildScrollView(

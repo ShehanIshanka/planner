@@ -157,9 +157,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                   color: Colors.grey,
                                 ),
                                 onPressed: () async {
-//                                      await _projectController
-//                                          .navigateToProjectRegistrationPage(
-//                                          context, "edit", snapshot.data[index],index: index);
+                                      await _projectController
+                                          .navigateToProjectRegistrationPage(
+                                          context, "edit", snapshot.data[index],index: index);
                                 },
                               ),
                               IconButton(

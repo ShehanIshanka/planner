@@ -62,4 +62,8 @@ class ProjectController {
 //        _projectDataExchanger.addMemberData(_members, resultMember);
     }
   }
+
+  void removeProject(Project project) async {
+    await _projectDataExchanger.removeProjectData(_projects, project);
+  }
 }

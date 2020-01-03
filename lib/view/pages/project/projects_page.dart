@@ -112,8 +112,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                   child: Card(
                     child: Container(
                       child: ListTile(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           title: Text(
                             snapshot.data[index].getProjectName(),
                             overflow: TextOverflow.visible,
@@ -157,9 +156,10 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                   color: Colors.grey,
                                 ),
                                 onPressed: () async {
-                                      await _projectController
-                                          .navigateToProjectRegistrationPage(
-                                          context, "edit", snapshot.data[index],index: index);
+                                  await _projectController
+                                      .navigateToProjectRegistrationPage(
+                                          context, "edit", snapshot.data[index],
+                                          index: index);
                                 },
                               ),
                               IconButton(
@@ -175,9 +175,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                             "This will permanently remove the member");
                                     print("STATUS IS $action");
                                     if (action == "ACCEPT") {
-//                                          await _projectController
-//                                              .removerMember(
-//                                              snapshot.data[index]);
+                                      await _projectController
+                                          .removeProject(snapshot.data[index]);
                                     }
                                     setState(() {
                                       if (action == "ACCEPT") {}

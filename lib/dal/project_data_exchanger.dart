@@ -3,12 +3,14 @@ import 'package:planner/model/beans/project/project_member.dart';
 import 'package:planner/model/beans/project/projects.dart';
 import 'package:planner/model/decoders/projects_json_decoder.dart';
 import 'package:planner/model/encoders/projects_json_encoder.dart';
+import 'package:planner/utils/file/file_stream.dart';
 import 'package:planner/utils/json/json_serde.dart';
 
 class ProjectDataExchanger {
   ProjectsJsonDecoder _projectsJsonDecoder = new ProjectsJsonDecoder();
   ProjectsJsonEncoder _projectsJsonEncoder = new ProjectsJsonEncoder();
   JsonSerDe _jsonSerDe = new JsonSerDe();
+  FileStream _fileStream = new FileStream();
 
   Future setProjectFileName(Project project) async {
     int projectId;
@@ -27,6 +29,14 @@ class ProjectDataExchanger {
       return handleNullProject();
     }
     return _projects;
+  }
+
+  Future removeProjectData(Projects projects, Project project) async {
+    List<Project> projectList = projects.getProjects();
+    projectList.remove(project);
+    projects.setProjects(projectList);
+    _projectsJsonEncoder.encode(projects);
+    await _fileStream.removeFile("projects", project.getFilename());
   }
 
   Future<void> addProjectData(Projects projects, Project project) async {

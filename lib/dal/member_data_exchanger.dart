@@ -3,11 +3,21 @@ import 'package:planner/model/beans/member/members.dart';
 import 'package:planner/model/decoders/members_json_decoder.dart';
 import 'package:planner/model/encoders/memebers_json_encoder.dart';
 import 'package:planner/utils/file/file_stream.dart';
+import 'package:planner/utils/json/json_serde.dart';
 
 class MemberDataExchanger {
   MembersJsonDecoder _membersJsonDecoder = new MembersJsonDecoder();
   MembersJsonEncoder _membersJsonEncoder = new MembersJsonEncoder();
+  JsonSerDe _jsonSerDe = new JsonSerDe();
   FileStream _fileStream = new FileStream();
+
+  Future setMemberFileName(Member member) async {
+    int memberId;
+    await getMemberId().then((onValue) {
+      memberId = onValue;
+    });
+    member.setFilename(memberId.toString() + ".txt");
+  }
 
   Future<Members> getMemberData() async {
     Members _members;
@@ -28,9 +38,10 @@ class MemberDataExchanger {
     await _fileStream.removeFile("members", member.getFilename());
   }
 
-  void addMemberData(Members members, Member member) {
+  Future addMemberData(Members members, Member member) async{
+    await setNewMemberId(
+        int.parse(member.getFilename().replaceAll(".txt", "")));
     List<Member> memberList = members.getMembers();
-    member.setFilename(member.getName() + ".txt");
     member.setChanged(true);
     memberList.add(member);
     members.setMembers(memberList);
@@ -43,6 +54,25 @@ class MemberDataExchanger {
     member.setChanged(true);
     members.setMembers(memberList);
     _membersJsonEncoder.encode(members);
+  }
+
+  Future setNewMemberId(int id) async {
+    Map<String, dynamic> memberIdMap = new Map();
+    memberIdMap["memberId"] = id + 1;
+    _jsonSerDe.toJson("data", "memberId.txt", memberIdMap);
+  }
+
+  Future<int> getMemberId() async {
+    Map<String, dynamic> memberIdMap = new Map();
+    await _jsonSerDe.fromJson("data/memberId.txt").then((onValue) {
+      memberIdMap = onValue;
+    });
+    print(memberIdMap);
+    if (memberIdMap != null) {
+      return memberIdMap["memberId"];
+    } else {
+      return 0;
+    }
   }
 
   Members handleNullMember() {

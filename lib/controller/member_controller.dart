@@ -19,13 +19,14 @@ class MemberController {
       BuildContext context, String status, Member member,{int index=1}) async {
     Member resultMember;
     if (status == "new") {
+      await _memberDataExchanger.setMemberFileName(member);
       resultMember = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   MemberRegistration(member: member, status: status)));
       if (resultMember != null) {
-        _memberDataExchanger.addMemberData(_members, resultMember);
+        await _memberDataExchanger.addMemberData(_members, resultMember);
       }
     } else if (status == "edit") {
       resultMember = await Navigator.push(

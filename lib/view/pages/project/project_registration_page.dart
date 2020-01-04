@@ -331,6 +331,11 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                 numeric: false,
                                 tooltip: "Personal holidays",
                               ),
+                              DataColumn(
+                                  label: Text(
+                                    "",
+                                  ),
+                                  numeric: false),
                             ],
                             rows: project
                                 .getProjectMembers()
@@ -341,7 +346,8 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                             .navigateToProjectTaskPage(
                                                 context,
                                                 projectMember,
-                                                calculateWorkingDays(projectMember));
+                                                calculateWorkingDays(
+                                                    projectMember));
                                       }),
                                       DataCell(
                                         SingleChildScrollView(
@@ -404,6 +410,18 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                                 context, projectMember);
                                           },
                                           child: new Text("Set Leaves"))),
+                                      DataCell(IconButton(
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          project
+                                              .getProjectMembers()
+                                              .remove(projectMember);
+                                          setState(() {});
+                                        },
+                                      )),
                                     ]))
                                 .toList()),
                       ),

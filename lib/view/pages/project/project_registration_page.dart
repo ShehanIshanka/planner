@@ -98,6 +98,8 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     String action = output[0];
     if (action == "OK") {
       selectedDates = output[1];
+      selectedDates.sort((a,b) => a.compareTo(b));
+      print(selectedDates);
       project.setHolidays(selectedDates);
       for (ProjectMember currentProjectMember in project.getProjectMembers()) {
         currentProjectMember.setLeaves(currentProjectMember
@@ -130,6 +132,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     if (action == "OK") {
       selectedLeaves =
           output[1].toSet().difference(selectedLeaves.toSet()).toList();
+      selectedLeaves..sort((a,b) => a.compareTo(b));
       setState(() {
         projectMember.setLeaves(selectedLeaves);
         projectMember.setTasksTime(projectMember

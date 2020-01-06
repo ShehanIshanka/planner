@@ -51,8 +51,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
     print("data/");
     print(projects.getProjects());
     print("data/");
-    return projects.getProjects();
-  }
+    return projects.getProjects();}
 
   List setProjectState(DateTime startDate, DateTime endDate) {
     DateTime now = new DateTime.now();
@@ -112,7 +111,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
                   child: Card(
                     child: Container(
                       child: ListTile(
-                          onTap: () {},
+                          onTap: () async{
+                            _projectController.navigateToProjectViewPage(context, snapshot.data[index]);
+                          },
                           title: Text(
                             snapshot.data[index].getProjectName(),
                             overflow: TextOverflow.visible,
@@ -199,7 +200,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
               context, "new", new Project());
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

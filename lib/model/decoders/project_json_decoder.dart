@@ -17,7 +17,7 @@ class ProjectJsonDecoder {
 
   void projectDecode(Project project, Map<String, dynamic> projectMap) async {
     project.setProjectName(projectMap["projectName"]);
-    await projectMemberDecode(projectMap["projectMembers"]).then((onValue) {
+    projectMemberDecode(projectMap["projectMembers"]).then((onValue) {
       project.setProjectMembers(onValue);
     });
     project.setStartDate(DateTime.parse(projectMap["startDate"]));

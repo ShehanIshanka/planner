@@ -5,9 +5,9 @@ import 'package:planner/utils/file/file_stream.dart';
 class JsonSerDe {
   FileStream _fileStream = new FileStream();
 
-  void toJson(String dir, String filename, Map<String, dynamic> jsonMap) {
+  Future toJson(String dir, String filename, Map<String, dynamic> jsonMap) async {
     String jsonString = jsonEncode(jsonMap);
-    _fileStream.writeContent(dir, filename, jsonString);
+    await _fileStream.writeContent(dir, filename, jsonString);
   }
 
   Future<Map<String, dynamic>> fromJson(String filename) async {

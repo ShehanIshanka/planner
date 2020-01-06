@@ -7,10 +7,10 @@ class ProjectsJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
   ProjectJsonEncoder _projectJsonEncoder = new ProjectJsonEncoder();
 
-  void encode(Projects projects) {
+  Future encode(Projects projects) async{
     Map<String, List<String>> projectsMap = new Map();
     projectsEncode(projects, projectsMap);
-    _jsonSerDe.toJson("data", "projects.txt", projectsMap);
+    await _jsonSerDe.toJson("data", "projects.txt", projectsMap);
   }
 
   void projectsEncode(

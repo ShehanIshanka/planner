@@ -43,6 +43,7 @@ class _MembersPageState extends State<MembersPage> {
 
   Future<List> setMembers() async {
     members = await _memberController.updateView();
+    print(members.getMembers());
     return members.getMembers();
   }
 
@@ -156,7 +157,7 @@ class _MembersPageState extends State<MembersPage> {
               context, "new", new Member());
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

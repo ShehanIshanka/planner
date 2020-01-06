@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:planner/utils/json/json_serde.dart';
+import 'package:planner/utils/file/file_stream.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -9,20 +9,24 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
+  FileStream _fileStream = new FileStream();
   Future sleep1() {
     return new Future.delayed(const Duration(seconds: 5), () => "5");
   }
 
-  void setupWorldTime() async{
+  void setup() async{
     await sleep1();
-    Navigator.pushReplacementNamed(context, "/home",arguments: {});
+    await _fileStream.createDirectory("data");
+    await _fileStream.createDirectory("projects");
+    await _fileStream.createDirectory("members");
+    Navigator.pushReplacementNamed(context, "/members",arguments: {});
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setupWorldTime();
+    setup();
   }
 
   @override

@@ -4,11 +4,11 @@ import 'package:planner/utils/json/json_serde.dart';
 class MemberJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
 
-  void encode(Member member) {
+  void encode(Member member) async{
     Map<String, String> memberMap = new Map();
     if (member.getChanged()) {
       memberEncode(member, memberMap);
-      _jsonSerDe.toJson("members", member.getFilename(), memberMap);
+     await _jsonSerDe.toJson("members", member.getFilename(), memberMap);
       member.setChanged(false);
     }
   }

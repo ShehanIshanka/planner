@@ -22,11 +22,14 @@ class ProjectDataExchanger {
 
   Future<Projects> getProjectData() async {
     Projects _projects;
+    await Future.delayed(const Duration(seconds: 1), () => "5");
     await _projectsJsonDecoder.decode("projects.txt").then((projects) {
       _projects = projects;
     });
     if (_projects == null) {
-      return handleNullProject();
+      _projects=new Projects();
+      _projects.setProjects([]);
+//      return handleNullProject();
     }
     return _projects;
   }
@@ -40,13 +43,13 @@ class ProjectDataExchanger {
   }
 
   Future<void> addProjectData(Projects projects, Project project) async {
-    await setNewProjectId(
-        int.parse(project.getFilename().replaceAll(".txt", "")));
     List<Project> projectList = projects.getProjects();
     project.setChanged(true);
     projectList.add(project);
     projects.setProjects(projectList);
-    _projectsJsonEncoder.encode(projects);
+    await _projectsJsonEncoder.encode(projects);
+    await setNewProjectId(
+        int.parse(project.getFilename().replaceAll(".txt", "")));
   }
 
   void editProjectData(Projects projects, Project project, int index) {

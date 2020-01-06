@@ -8,6 +8,7 @@ import 'package:planner/model/beans/project/project_member.dart';
 import 'package:planner/model/beans/project/projects.dart';
 import 'package:planner/view/pages/project/project_registration_page.dart';
 import 'package:planner/view/pages/project/project_task_page.dart';
+import 'package:planner/view/pages/project/projects_view_page.dart';
 
 class ProjectController {
   ProjectDataExchanger _projectDataExchanger = new ProjectDataExchanger();
@@ -37,7 +38,7 @@ class ProjectController {
               builder: (context) => ProjectRegistration(
                   project: project, status: status, members: _members)));
       if (resultProject != null) {
-       await _projectDataExchanger.addProjectData(_projects, resultProject);
+        await _projectDataExchanger.addProjectData(_projects, resultProject);
       }
     } else if (status == "edit") {
       resultProject = await Navigator.push(
@@ -46,21 +47,30 @@ class ProjectController {
               builder: (context) => ProjectRegistration(
                   project: project, status: status, members: _members)));
       if (resultProject != null) {
-        _projectDataExchanger.editProjectData(_projects, resultProject,index);
+        _projectDataExchanger.editProjectData(_projects, resultProject, index);
       }
     }
   }
 
-  Future navigateToProjectTaskPage(
-      BuildContext context, ProjectMember projectMember,int projectTime) async {
+  Future navigateToProjectTaskPage(BuildContext context,
+      ProjectMember projectMember, int projectTime) async {
     ProjectMember resultProjectMember;
     resultProjectMember = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProjectTask(projectMember: projectMember,projectTime: projectTime)));
+            builder: (context) => ProjectTask(
+                projectMember: projectMember, projectTime: projectTime)));
     if (resultProjectMember != null) {
 //        _projectDataExchanger.addMemberData(_members, resultMember);
     }
+  }
+
+  Future navigateToProjectViewPage(
+      BuildContext context, Project project) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProjectsViewPage(project: project)));
   }
 
   void removeProject(Project project) async {

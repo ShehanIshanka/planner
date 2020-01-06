@@ -7,10 +7,10 @@ class MembersJsonEncoder {
   JsonSerDe _jsonSerDe = new JsonSerDe();
   MemberJsonEncoder _memberJsonEncoder = new MemberJsonEncoder();
 
-  void encode(Members members) {
+  Future encode(Members members)async {
     Map<String, List<String>> membersMap = new Map();
     membersEncode(members, membersMap);
-    _jsonSerDe.toJson("data", "members.txt", membersMap);
+    await _jsonSerDe.toJson("data", "members.txt", membersMap);
   }
 
   void membersEncode(Members members, Map<String, List<String>> membersMap) {

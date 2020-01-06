@@ -8,7 +8,7 @@ void main() => runApp(MaterialApp(
 //      home: Home(),
   initialRoute: '/',
   routes: {
-    '/': (context) => Loading(),
+    '/': (context) => new Loading(),
     '/home': (context) => ProjectsPage(),
     '/members': (context) => MembersPage(),
     '/projects': (context) => ProjectsPage(),

@@ -19,6 +19,7 @@ class FileStream {
       // Read the file
       String contents = await file.readAsString();
       // Returning the contents of the file
+      print("FIle Reading :" + filename);
       print("Contents :" + contents);
 
       return contents;
@@ -28,13 +29,18 @@ class FileStream {
     }
   }
 
-  void writeContent(String dir, String filename, String data) async {
+  Future writeContent(String dir, String filename, String data) async {
     final path = await _localPath;
     final file = await File('$path/$dir/$filename');
     final myDir = new Directory('$path/$dir');
     await myDir.exists().then((isThere) {
       if (!isThere) {
         myDir.create(recursive: true);
+      }
+    });
+    await file.exists().then((isThere) {
+      if (!isThere) {
+        file.create(recursive: true);
       }
     });
     print("File Name writing:" + filename);
@@ -46,5 +52,17 @@ class FileStream {
     final path = await _localPath;
     final file = await File('$path/$dir/$filename');
     file.deleteSync(recursive: true);
+  }
+
+  Future createDirectory(String directory) async {
+    final path = await _localPath;
+    final dir = Directory('$path/$directory');
+    await dir.create(recursive: true);
+  }
+
+  Future createFile(String directory) async {
+    final path = await _localPath;
+    final dir = Directory('$path/$directory');
+    await dir.create(recursive: true);
   }
 }

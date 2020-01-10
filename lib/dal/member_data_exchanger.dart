@@ -21,12 +21,12 @@ class MemberDataExchanger {
 
   Future<Members> getMemberData() async {
     Members _members;
-    await Future.delayed(const Duration(seconds: 1), () => "5");
+    await Future.delayed(const Duration(milliseconds: 2));
     await _membersJsonDecoder.decode("members.txt").then((members) {
       _members = members;
     });
     if (_members == null) {
-      _members=new Members();
+      _members = new Members();
       _members.setMembers([]);
 //      return handleNullMember();
     }
@@ -41,7 +41,7 @@ class MemberDataExchanger {
     await _fileStream.removeFile("members", member.getFilename());
   }
 
-  Future addMemberData(Members members, Member member) async{
+  Future addMemberData(Members members, Member member) async {
     List<Member> memberList = members.getMembers();
     member.setChanged(true);
     memberList.add(member);

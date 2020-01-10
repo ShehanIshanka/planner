@@ -5,16 +5,20 @@ class SideDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new SizedBox(
-      width: MediaQuery.of(context).size.width * 0.65,
+      width: MediaQuery.of(context).size.width * 0.55,
       child: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Center(
+                child: new Image.asset(
+                  'assets/drawer.png'
+                ),
+              ),
               margin: EdgeInsets.zero,
               decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Colors.lightBlueAccent,
               ),
             ),
             ListTile(

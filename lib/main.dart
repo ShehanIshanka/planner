@@ -4,6 +4,7 @@ import 'package:planner/view/pages/loading_page.dart';
 import 'package:planner/view/pages/project/project_registration_page.dart';
 import 'package:planner/view/pages/project/projects_page.dart';
 
+
 void main() => runApp(MaterialApp(
 //      home: Home(),
   initialRoute: '/',

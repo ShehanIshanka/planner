@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,18 @@ import 'package:planner/view/widgets/popup_box.dart';
 import 'package:planner/view/widgets/side_drawer.dart';
 import 'package:planner/view/widgets/confirmation_dialog.dart';
 
+class ticker extends StatefulWidget {
+  @override
+  _tickerState createState() => _tickerState();
+}
+
+class _tickerState extends State<ticker> with SingleTickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 class ProjectsPage extends StatefulWidget {
   @override
   _ProjectsPageState createState() => new _ProjectsPageState();
@@ -21,6 +35,28 @@ class _ProjectsPageState extends State<ProjectsPage> {
   ProjectController _projectController = new ProjectController();
   ConfirmationDialog projectRemovalCheck = new ConfirmationDialog();
   PopUpBox popUpBox = new PopUpBox();
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: _tickerState(),
+        duration: Duration(milliseconds: 1000),
+        upperBound: 4 * pi,
+        lowerBound: 0)
+      ..addListener(() {
+        if (_controller.isCompleted) {
+          _controller.reset();
+        }
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void test() {
     Projects projects = new Projects();
@@ -51,7 +87,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
     print("data/");
     print(projects.getProjects());
     print("data/");
-    return projects.getProjects();}
+    return projects.getProjects();
+  }
 
   List setProjectState(DateTime startDate, DateTime endDate) {
     DateTime now = new DateTime.now();
@@ -85,14 +122,24 @@ class _ProjectsPageState extends State<ProjectsPage> {
       appBar: new AppBar(
         title: new Text("Projects"),
         actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
-            onPressed: () {
-              test();
-            },
-            child: Text("reset"),
-            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
-          ),
+          GestureDetector(
+            child: RotationTransition(
+              turns: Tween(begin: 0.0, end: pi / 40).animate(_controller),
+              child: IconButton(
+                color: Colors.blue,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 30),
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {});
+                  _controller.forward(from: 0);
+                },
+              ),
+            ),
+          )
         ],
       ),
       body: FutureBuilder(
@@ -111,8 +158,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
                   child: Card(
                     child: Container(
                       child: ListTile(
-                          onTap: () async{
-                            _projectController.navigateToProjectViewPage(context, snapshot.data[index]);
+                          onTap: () async {
+                            _projectController.navigateToProjectViewPage(
+                                context, snapshot.data[index]);
                           },
                           title: Text(
                             snapshot.data[index].getProjectName(),

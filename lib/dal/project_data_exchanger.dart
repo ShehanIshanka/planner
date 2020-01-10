@@ -22,7 +22,7 @@ class ProjectDataExchanger {
 
   Future<Projects> getProjectData() async {
     Projects _projects;
-    await Future.delayed(const Duration(seconds: 1), () => "5");
+    await Future.delayed(const Duration(milliseconds: 5));
     await _projectsJsonDecoder.decode("projects.txt").then((projects) {
       _projects = projects;
     });

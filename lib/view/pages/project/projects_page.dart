@@ -147,6 +147,19 @@ class _ProjectsPageState extends State<ProjectsPage> {
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
+            } else if (snapshot.data.isEmpty) {
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.event_note, color: Colors.grey, size: 42.0),
+                  Text(
+                    "No projects",
+                    style: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 20),
+                  ),
+                ],
+              ));
             }
             return SafeArea(
                 child: ListView.builder(

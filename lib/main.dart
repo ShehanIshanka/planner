@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner/view/pages/instruction_page.dart';
 import 'package:planner/view/pages/member/members_page.dart';
 import 'package:planner/view/pages/loading_page.dart';
 import 'package:planner/view/pages/project/project_registration_page.dart';
@@ -14,6 +15,7 @@ void main() => runApp(MaterialApp(
     '/members': (context) => MembersPage(),
     '/projects': (context) => ProjectsPage(),
     '/projectRegistration': (context) => ProjectRegistration(),
+    '/instructions': (context) => Instructions(),
 //        '/members_registration': (context) => MemberRegistration()
   },
 ));

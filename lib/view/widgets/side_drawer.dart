@@ -37,7 +37,15 @@ class SideDrawer extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, "/members");
               },
             ),
-            Divider()
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('Instructions'),
+              onTap: () {
+//                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, "/instructions");
+              },
+            ),
           ],
         ),
       ),

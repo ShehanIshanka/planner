@@ -19,7 +19,7 @@ class _LoadingState extends State<Loading> {
     await _fileStream.createDirectory("data");
     await _fileStream.createDirectory("projects");
     await _fileStream.createDirectory("members");
-    Navigator.pushReplacementNamed(context, "/members",arguments: {});
+    Navigator.pushReplacementNamed(context, "/instructions",arguments: {});
   }
 
   @override

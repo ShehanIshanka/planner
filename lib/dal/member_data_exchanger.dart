@@ -21,7 +21,7 @@ class MemberDataExchanger {
 
   Future<Members> getMemberData() async {
     Members _members;
-    await Future.delayed(const Duration(milliseconds: 2));
+    await Future.delayed(const Duration(milliseconds: 4));
     await _membersJsonDecoder.decode("members.txt").then((members) {
       _members = members;
     });

@@ -364,9 +364,9 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                                         children: <Widget>[
                                                           Container(
                                                             child: Text(
-                                                                projectMember
+                                                                "${projectMember
                                                                         .getTasks()[
-                                                                    index],
+                                                                    index]} ",
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible),

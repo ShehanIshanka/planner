@@ -84,6 +84,21 @@ class _ProjectTaskState extends State<ProjectTask> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
+              } else if (snapshot.data.isEmpty) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.note, color: Colors.grey, size: 42.0),
+                    Text(
+                      "No tasks for ${projectMember.getName()}",
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  ],
+                ));
               }
               return SafeArea(
                   child: Form(

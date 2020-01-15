@@ -8,7 +8,8 @@ class Instructions extends StatefulWidget {
 
 class _InstructionsState extends State<Instructions> {
   final controller = new PageController();
-  int currentPageValue =0;
+  int currentPageValue = 0;
+
   void getChangedPageAndMoveBar(int page) {
     currentPageValue = page;
     setState(() {});
@@ -16,18 +17,12 @@ class _InstructionsState extends State<Instructions> {
 
   final List<Widget> introWidgetsList = <Widget>[
     Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/instructions/1.png')
-        )
-      ),
+      child: Image.asset('assets/instructions/1.png',scale: 0.2),
     ),
     Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/instructions/2.png')
-        )
-      ),
+          image:
+              DecorationImage(image: AssetImage('assets/instructions/2.png'))),
     ),
   ];
 
@@ -55,36 +50,35 @@ class _InstructionsState extends State<Instructions> {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
-                PageView.builder(
-                  physics: ClampingScrollPhysics(),
-                  itemCount: introWidgetsList.length,
-                  onPageChanged: (int page) {
-                    getChangedPageAndMoveBar(page);
-                  },
-                  controller: controller,
-                  itemBuilder: (context, index) {
-                    return introWidgetsList[index];
-                  },
+              PageView.builder(
+                physics: ClampingScrollPhysics(),
+                itemCount: introWidgetsList.length,
+                onPageChanged: (int page) {
+                  getChangedPageAndMoveBar(page);
+                },
+                controller: controller,
+                itemBuilder: (context, index) {
+                  return introWidgetsList[index];
+                },
               ),
-              Stack(
-                alignment: AlignmentDirectional.topStart,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 35),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (int i = 0; i < introWidgetsList.length; i++)
-                          if (i == currentPageValue) ...[circleBar(true)] else
-                            circleBar(false),
-                      ],
-                    ),
+              Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 35),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      for (int i = 0; i < introWidgetsList.length; i++)
+                        if (i == currentPageValue) ...[circleBar(true)] else
+                          circleBar(false),
+                    ],
                   ),
-                ],
+                ),
               )
             ],
-
           ),
         ),
       ),

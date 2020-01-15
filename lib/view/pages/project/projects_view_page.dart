@@ -178,9 +178,9 @@ class _ProjectsViewPageState extends State<ProjectsViewPage> {
                                                           children: <Widget>[
                                                             Container(
                                                               child: Text(
-                                                                  projectMember
-                                                                          .getTasks()[
-                                                                      index],
+                                                                  "${projectMember
+                                                                      .getTasks()[
+                                                                  index]} ",
                                                                   overflow:
                                                                       TextOverflow
                                                                           .visible),

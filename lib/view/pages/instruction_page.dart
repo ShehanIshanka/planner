@@ -16,13 +16,35 @@ class _InstructionsState extends State<Instructions> {
   }
 
   final List<Widget> introWidgetsList = <Widget>[
-    Container(
-      child: Image.asset('assets/instructions/1.png',scale: 0.2),
+    Card(
+      child: Image.asset('assets/instructions/1.png', scale: 0.2),
     ),
-    Container(
-      decoration: BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage('assets/instructions/2.png'))),
+    Card(
+      child: Image.asset('assets/instructions/2.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/3.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/4.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/5.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/6.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/7.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/8.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/9.png', scale: 0.2),
+    ),
+    Card(
+      child: Image.asset('assets/instructions/10.png', scale: 0.2),
     ),
   ];
 
@@ -33,7 +55,7 @@ class _InstructionsState extends State<Instructions> {
       height: isActive ? 12 : 8,
       width: isActive ? 12 : 8,
       decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.grey,
+          color: isActive ? Colors.black : Colors.grey,
           borderRadius: BorderRadius.all(Radius.circular(12))),
     );
   }

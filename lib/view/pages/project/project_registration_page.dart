@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,18 @@ import 'package:planner/view/widgets/message_box.dart';
 import 'package:planner/view/widgets/multi_select_dialog.dart';
 import 'package:planner/view/widgets/popup_calendar.dart';
 import 'package:planner/view/widgets/task_dialog.dart';
+
+class ticker extends StatefulWidget {
+  @override
+  _tickerState createState() => _tickerState();
+}
+
+class _tickerState extends State<ticker> with SingleTickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 class ProjectRegistration extends StatefulWidget {
   final Project project;
@@ -49,9 +63,20 @@ class _ProjectRegistration extends State<ProjectRegistration> {
   ProjectController _projectController = new ProjectController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  AnimationController _controller;
 
   @override
   void initState() {
+    _controller = AnimationController(
+        vsync: _tickerState(),
+        duration: Duration(milliseconds: 1000),
+        upperBound: 4 * pi,
+        lowerBound: 0)
+      ..addListener(() {
+        if (_controller.isCompleted) {
+          _controller.reset();
+        }
+      });
     setState(() {
       if (status == "new") {
         title = "New Project";
@@ -62,6 +87,12 @@ class _ProjectRegistration extends State<ProjectRegistration> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future selectDateRange(BuildContext context) async {
@@ -264,6 +295,26 @@ class _ProjectRegistration extends State<ProjectRegistration> {
       key: _scaffoldKey,
       appBar: new AppBar(
         title: new Text(title),
+        actions: <Widget>[
+          GestureDetector(
+            child: RotationTransition(
+              turns: Tween(begin: 0.0, end: pi / 40).animate(_controller),
+              child: IconButton(
+                color: Colors.blue,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 30),
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {});
+                  _controller.forward(from: 0);
+                },
+              ),
+            ),
+          )
+        ],
       ),
       body: new SafeArea(
           top: false,

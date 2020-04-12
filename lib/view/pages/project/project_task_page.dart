@@ -49,7 +49,9 @@ class _ProjectTaskState extends State<ProjectTask> {
   void _submitForm(BuildContext context) {
     final FormState form = _formKey.currentState;
 
-    if (!form.validate() | _tasksTime.contains(-1.0)) {
+    if (_tasks.length == 0) {
+      _messageBox.showMessage('Empty tasks', _scaffoldKey);
+    } else if (!form.validate() | _tasksTime.contains(-1.0)) {
       _messageBox.showMessage(
           'Form is not valid!  Please review and correct.', _scaffoldKey);
     } else {
@@ -128,10 +130,12 @@ class _ProjectTaskState extends State<ProjectTask> {
                                       onChanged: (val) => _tasks[index] = val,
 //                                  initialValue: _tasks[index],
                                       inputFormatters: [
-                                        new LengthLimitingTextInputFormatter(100)
+                                        new LengthLimitingTextInputFormatter(
+                                            100)
                                       ],
-                                      validator: (val) =>
-                                          val.isEmpty ? 'Task is required' : null,
+                                      validator: (val) => val.isEmpty
+                                          ? 'Task is required'
+                                          : null,
                                       onSaved: (val) => _tasks[index] = val,
                                     ),
                                     Row(

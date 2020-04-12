@@ -50,6 +50,52 @@ class _ProjectsViewPageState extends State<ProjectsViewPage> {
     }
   }
 
+  List<Row> getTasks(ProjectMember projectMember) {
+    if (projectMember.getTasks().length == 0) {
+      return [
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Text("No tasks", overflow: TextOverflow.visible),
+              ),
+            ])
+      ];
+    }
+    return List.generate(
+        projectMember.getTasks().length,
+        (index) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Text("${projectMember.getTasks()[index]} ",
+                        overflow: TextOverflow.visible),
+                  ),
+                  Container(
+                    child: Text(
+                        projectMember.getTasksTime()[index].toString() +
+                            " days",
+                        overflow: TextOverflow.visible),
+                  ),
+                ])).toList();
+  }
+
+  List<Container> getLeaves(ProjectMember projectMember) {
+    if (projectMember.getLeaves().length == 0) {
+      return [
+        Container(
+          child: Text("No leaves", overflow: TextOverflow.visible),
+        ),
+      ];
+    }
+    return List.generate(
+        projectMember.getLeaves().length,
+        (index) => Container(
+              child: Text(formatter.format(projectMember.getLeaves()[index]),
+                  overflow: TextOverflow.visible),
+            )).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -171,34 +217,8 @@ class _ProjectsViewPageState extends State<ProjectsViewPage> {
                                           DataCell(
                                             SingleChildScrollView(
                                               child: Column(
-                                                children: List.generate(
-                                                    projectMember
-                                                        .getTasks()
-                                                        .length,
-                                                    (index) => Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: <Widget>[
-                                                              Container(
-                                                                child: Text(
-                                                                    "${projectMember.getTasks()[index]} ",
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .visible),
-                                                              ),
-                                                              Container(
-                                                                child: Text(
-                                                                    projectMember
-                                                                            .getTasksTime()[
-                                                                                index]
-                                                                            .toString() +
-                                                                        " days",
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .visible),
-                                                              ),
-                                                            ])).toList(),
+                                                children:
+                                                    getTasks(projectMember),
                                               ),
                                             ),
                                           ),
@@ -227,20 +247,8 @@ class _ProjectsViewPageState extends State<ProjectsViewPage> {
                                           DataCell(
                                             SingleChildScrollView(
                                               child: Column(
-                                                children: List.generate(
-                                                    projectMember
-                                                        .getLeaves()
-                                                        .length,
-                                                    (index) => Container(
-                                                          child: Text(
-                                                              formatter.format(
-                                                                  projectMember
-                                                                          .getLeaves()[
-                                                                      index]),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .visible),
-                                                        )).toList(),
+                                                children:
+                                                    getLeaves(projectMember),
                                               ),
                                             ),
                                           )

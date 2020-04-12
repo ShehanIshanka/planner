@@ -213,6 +213,38 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     }
   }
 
+  List<Row> getTasks(ProjectMember projectMember) {
+    if (projectMember.getTasks().length == 0) {
+      return [
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Text("No tasks",
+                    style: TextStyle(color: Colors.grey[400]),
+                    overflow: TextOverflow.visible),
+              ),
+            ])
+      ];
+    }
+    return List.generate(
+        projectMember.getTasks().length,
+        (index) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Text("${projectMember.getTasks()[index]} ",
+                        overflow: TextOverflow.visible),
+                  ),
+                  Container(
+                    child: Text(
+                        projectMember.getTasksTime()[index].toString() +
+                            " days",
+                        overflow: TextOverflow.visible),
+                  ),
+                ])).toList();
+  }
+
   void _submitForm(BuildContext context) {
     final FormState form = _formKey.currentState;
 
@@ -357,34 +389,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
                                         DataCell(
                                           SingleChildScrollView(
                                             child: Column(
-                                              children: List.generate(
-                                                  projectMember
-                                                      .getTasks()
-                                                      .length,
-                                                  (index) => Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              child: Text(
-                                                                  "${projectMember.getTasks()[index]} ",
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .visible),
-                                                            ),
-                                                            Container(
-                                                              child: Text(
-                                                                  projectMember
-                                                                          .getTasksTime()[
-                                                                              index]
-                                                                          .toString() +
-                                                                      " days",
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .visible),
-                                                            ),
-                                                          ])).toList(),
+                                              children: getTasks(projectMember),
                                             ),
                                           ),
                                         ),

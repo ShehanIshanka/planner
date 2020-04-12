@@ -98,7 +98,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     String action = output[0];
     if (action == "OK") {
       selectedDates = output[1];
-      selectedDates.sort((a,b) => a.compareTo(b));
+      selectedDates.sort((a, b) => a.compareTo(b));
       print(selectedDates);
       project.setHolidays(selectedDates);
       for (ProjectMember currentProjectMember in project.getProjectMembers()) {
@@ -132,7 +132,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     if (action == "OK") {
       selectedLeaves =
           output[1].toSet().difference(selectedLeaves.toSet()).toList();
-      selectedLeaves..sort((a,b) => a.compareTo(b));
+      selectedLeaves..sort((a, b) => a.compareTo(b));
       setState(() {
         projectMember.setLeaves(selectedLeaves);
         projectMember.setTasksTime(projectMember
@@ -236,203 +236,207 @@ class _ProjectRegistration extends State<ProjectRegistration> {
       body: new SafeArea(
           top: false,
           bottom: false,
-          child: new ListView(
+          child: Scrollbar(
+            child: new ListView(
 //                mainAxisSize: MainAxisSize.min,
 //                mainAxisAlignment: MainAxisAlignment.center,
 //                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-              ),
-              Form(
-                key: _formKey,
-                autovalidate: true,
-                child: new TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    icon: const Icon(Icons.assignment),
-                    hintText: 'Enter project name',
-                    labelText: 'Project Name',
-                  ),
-                  initialValue: project.getProjectName(),
-                  inputFormatters: [new LengthLimitingTextInputFormatter(30)],
-                  validator: (val) => val.isEmpty ? 'Name is required' : null,
-                  onSaved: (val) => project.setProjectName(val.trim()),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
                 ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  new RaisedButton(
-                      color: Colors.lightBlue,
-                      onPressed: () async {
-                        await selectDateRange(context);
-                        project.setStartDate(dateRange[0]);
-                        project.setEndDate(dateRange[1]);
-                      },
-                      child: new Text("Project Duration")),
-                  new MaterialButton(
-                      color: Colors.lightBlue,
-                      onPressed: () async {
-                        await selectHolidays(context);
+                Form(
+                  key: _formKey,
+                  autovalidate: true,
+                  child: new TextFormField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      icon: const Icon(Icons.assignment),
+                      hintText: 'Enter project name',
+                      labelText: 'Project Name',
+                    ),
+                    initialValue: project.getProjectName(),
+                    inputFormatters: [new LengthLimitingTextInputFormatter(30)],
+                    validator: (val) => val.isEmpty ? 'Name is required' : null,
+                    onSaved: (val) => project.setProjectName(val.trim()),
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    new RaisedButton(
+                        color: Colors.lightBlue,
+                        onPressed: () async {
+                          await selectDateRange(context);
+                          project.setStartDate(dateRange[0]);
+                          project.setEndDate(dateRange[1]);
+                        },
+                        child: new Text("Project Duration")),
+                    new MaterialButton(
+                        color: Colors.lightBlue,
+                        onPressed: () async {
+                          await selectHolidays(context);
 //                        project.setHolidays(selectedDates);
-                      },
-                      child: new Text("Mark Holidays"))
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        side: new BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(4.0)),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+                        },
+                        child: new Text("Mark Holidays"))
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Card(
+                      shape: RoundedRectangleBorder(
+                          side: new BorderSide(color: Colors.blue, width: 2.0),
+                          borderRadius: BorderRadius.circular(4.0)),
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            columns: [
-                              DataColumn(
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              columns: [
+                                DataColumn(
+                                    label: Text(
+                                      "Members",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    numeric: false,
+                                    tooltip: "Member name"),
+                                DataColumn(
+                                  label: Center(
+                                    child: Text(
+                                      "Tasks",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  numeric: false,
+                                  tooltip: "Task assigned",
+                                ),
+                                DataColumn(
                                   label: Text(
-                                    "Members",
+                                    "Working Days",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
                                   numeric: false,
-                                  tooltip: "Member name"),
-                              DataColumn(
-                                label: Center(
-                                  child: Text(
-                                    "Tasks",
+                                  tooltip: "Task assigned",
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    "Leaves",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
+                                  numeric: false,
+                                  tooltip: "Personal holidays",
                                 ),
-                                numeric: false,
-                                tooltip: "Task assigned",
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  "Working Days",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                numeric: false,
-                                tooltip: "Task assigned",
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  "Leaves",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                numeric: false,
-                                tooltip: "Personal holidays",
-                              ),
-                              DataColumn(
-                                  label: Text(
-                                    "",
-                                  ),
-                                  numeric: false),
-                            ],
-                            rows: project
-                                .getProjectMembers()
-                                .map((projectMember) => DataRow(cells: [
-                                      DataCell(Text(projectMember.getName()),
-                                          showEditIcon: true, onTap: () async {
-                                        _projectController
-                                            .navigateToProjectTaskPage(
-                                                context,
-                                                projectMember,
-                                                calculateWorkingDays(
-                                                    projectMember));
-                                      }),
-                                      DataCell(
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            children: List.generate(
-                                                projectMember.getTasks().length,
-                                                (index) => Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            child: Text(
-                                                                "${projectMember
-                                                                        .getTasks()[
-                                                                    index]} ",
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .visible),
-                                                          ),
-                                                          Container(
-                                                            child: Text(
-                                                                projectMember
-                                                                        .getTasksTime()[
-                                                                            index]
-                                                                        .toString() +
-                                                                    " days",
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .visible),
-                                                          ),
-                                                        ])).toList(),
+                                DataColumn(
+                                    label: Text(
+                                      "",
+                                    ),
+                                    numeric: false),
+                              ],
+                              rows: project
+                                  .getProjectMembers()
+                                  .map((projectMember) => DataRow(cells: [
+                                        DataCell(Text(projectMember.getName()),
+                                            showEditIcon: true,
+                                            onTap: () async {
+                                          _projectController
+                                              .navigateToProjectTaskPage(
+                                                  context,
+                                                  projectMember,
+                                                  calculateWorkingDays(
+                                                      projectMember));
+                                        }),
+                                        DataCell(
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              children: List.generate(
+                                                  projectMember
+                                                      .getTasks()
+                                                      .length,
+                                                  (index) => Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              child: Text(
+                                                                  "${projectMember.getTasks()[index]} ",
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .visible),
+                                                            ),
+                                                            Container(
+                                                              child: Text(
+                                                                  projectMember
+                                                                          .getTasksTime()[
+                                                                              index]
+                                                                          .toString() +
+                                                                      " days",
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .visible),
+                                                            ),
+                                                          ])).toList(),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      DataCell(
-                                        new LinearPercentIndicator(
-                                          width: 50.0,
-                                          lineHeight: 14.0,
-                                          percent: setTasksTime(projectMember),
-                                          center: Text(
-                                            projectMember
-                                                    .getTasksTime()
-                                                    .fold(0, (p, c) => p + c)
-                                                    .toString() +
-                                                " days",
-                                            style:
-                                                new TextStyle(fontSize: 12.0),
+                                        DataCell(
+                                          new LinearPercentIndicator(
+                                            width: 50.0,
+                                            lineHeight: 14.0,
+                                            percent:
+                                                setTasksTime(projectMember),
+                                            center: Text(
+                                              projectMember
+                                                      .getTasksTime()
+                                                      .fold(0, (p, c) => p + c)
+                                                      .toString() +
+                                                  " days",
+                                              style:
+                                                  new TextStyle(fontSize: 12.0),
+                                            ),
+                                            backgroundColor: Colors.grey,
+                                            progressColor: Colors.blue,
+                                            trailing: Text(
+                                                setWorkingDays(projectMember)),
                                           ),
-                                          backgroundColor: Colors.grey,
-                                          progressColor: Colors.blue,
-                                          trailing: Text(
-                                              setWorkingDays(projectMember)),
                                         ),
-                                      ),
-                                      DataCell(new MaterialButton(
-                                          color: Colors.blueGrey,
-                                          onPressed: () async {
-                                            await selectLeaves(
-                                                context, projectMember);
+                                        DataCell(new MaterialButton(
+                                            color: Colors.blueGrey,
+                                            onPressed: () async {
+                                              await selectLeaves(
+                                                  context, projectMember);
+                                            },
+                                            child: new Text("Set Leaves"))),
+                                        DataCell(IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            project
+                                                .getProjectMembers()
+                                                .remove(projectMember);
+                                            setState(() {});
                                           },
-                                          child: new Text("Set Leaves"))),
-                                      DataCell(IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: Colors.grey,
-                                        ),
-                                        onPressed: () {
-                                          project
-                                              .getProjectMembers()
-                                              .remove(projectMember);
-                                          setState(() {});
-                                        },
-                                      )),
-                                    ]))
-                                .toList()),
+                                        )),
+                                      ]))
+                                  .toList()),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           )),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

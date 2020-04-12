@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -36,6 +37,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
   ConfirmationDialog projectRemovalCheck = new ConfirmationDialog();
   PopUpBox popUpBox = new PopUpBox();
   AnimationController _controller;
+  final ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -80,6 +82,22 @@ class _ProjectsPageState extends State<ProjectsPage> {
     projects.setProjects(projectList);
     ProjectsJsonEncoder().encode(projects);
     setState(() {});
+  }
+
+  bool enableScrollBar(double height, int length) {
+    if (height / 96 < length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  double getHeight(double height, int length) {
+    double h = height - (length + 1 - height / 96) * 96;
+    if (h < 20) {
+      return 20.0;
+    }
+    return h;
   }
 
   Future<List> setProjects() async {
@@ -156,100 +174,114 @@ class _ProjectsPageState extends State<ProjectsPage> {
                   Text(
                     "No projects",
                     style: TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 20),
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
                   ),
                 ],
               ));
             }
             return SafeArea(
-                child: ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-                  child: Card(
-                    child: Container(
-                      child: ListTile(
-                          onTap: () async {
-                            _projectController.navigateToProjectViewPage(
-                                context, snapshot.data[index]);
-                          },
-                          title: Text(
-                            snapshot.data[index].getProjectName(),
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          leading: Container(
-                            padding: EdgeInsets.only(right: 12.0),
-                            decoration: new BoxDecoration(
-                                border: new Border(
-                                    right: new BorderSide(
-                                        width: 1.0, color: Colors.black12))),
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage('assets/project.jpg'),
+                child: DraggableScrollbar.rrect(
+              controller: controller,
+              heightScrollThumb: getHeight(
+                  MediaQuery.of(context).size.height, snapshot.data.length),
+              backgroundColor: Colors.grey[400],
+              alwaysVisibleScrollThumb: enableScrollBar(
+                  MediaQuery.of(context).size.height, snapshot.data.length),
+              child: ListView.builder(
+                itemCount: snapshot.data.length,
+                controller: controller,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                    child: Card(
+                      child: Container(
+                        child: ListTile(
+                            onTap: () async {
+                              _projectController.navigateToProjectViewPage(
+                                  context, snapshot.data[index]);
+                            },
+                            title: Text(
+                              snapshot.data[index].getProjectName(),
+                              overflow: TextOverflow.visible,
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          subtitle: Row(
-                            children: <Widget>[
-                              new DotsIndicator(
-                                dotsCount: 1,
-                                position: 0,
-                                decorator: DotsDecorator(
-                                  activeColor: setProjectState(
-                                      snapshot.data[index].getStartDate(),
-                                      snapshot.data[index].getEndDate())[1],
-                                ),
+                            leading: Container(
+                              padding: EdgeInsets.only(right: 12.0),
+                              decoration: new BoxDecoration(
+                                  border: new Border(
+                                      right: new BorderSide(
+                                          width: 1.0, color: Colors.black12))),
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/project.jpg'),
                               ),
-                              Text(
-                                  setProjectState(
-                                      snapshot.data[index].getStartDate(),
-                                      snapshot.data[index].getEndDate())[0],
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontFamily: 'Raleway')),
-                            ],
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.grey,
+                            ),
+                            subtitle: Row(
+                              children: <Widget>[
+                                new DotsIndicator(
+                                  dotsCount: 1,
+                                  position: 0,
+                                  decorator: DotsDecorator(
+                                    activeColor: setProjectState(
+                                        snapshot.data[index].getStartDate(),
+                                        snapshot.data[index].getEndDate())[1],
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  await _projectController
-                                      .navigateToProjectRegistrationPage(
-                                          context, "edit", snapshot.data[index],
-                                          index: index);
-                                },
-                              ),
-                              IconButton(
+                                Text(
+                                    setProjectState(
+                                        snapshot.data[index].getStartDate(),
+                                        snapshot.data[index].getEndDate())[0],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontFamily: 'Raleway')),
+                              ],
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
                                   icon: Icon(
-                                    Icons.delete,
+                                    Icons.edit,
                                     color: Colors.grey,
                                   ),
                                   onPressed: () async {
-                                    String action =
-                                        await projectRemovalCheck.confirmDialog(
+                                    await _projectController
+                                        .navigateToProjectRegistrationPage(
                                             context,
-                                            "Remove this project?",
-                                            "This will permanently remove the member");
-                                    print("STATUS IS $action");
-                                    if (action == "ACCEPT") {
-                                      await _projectController
-                                          .removeProject(snapshot.data[index]);
-                                    }
-                                    setState(() {
-                                      if (action == "ACCEPT") {}
-                                    });
-                                  }),
-                            ],
-                          )),
+                                            "edit",
+                                            snapshot.data[index],
+                                            index: index);
+                                  },
+                                ),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () async {
+                                      String action = await projectRemovalCheck
+                                          .confirmDialog(
+                                              context,
+                                              "Remove this project?",
+                                              "This will permanently remove the member");
+                                      print("STATUS IS $action");
+                                      if (action == "ACCEPT") {
+                                        await _projectController.removeProject(
+                                            snapshot.data[index]);
+                                      }
+                                      setState(() {
+                                        if (action == "ACCEPT") {}
+                                      });
+                                    }),
+                              ],
+                            )),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ));
           }),
       floatingActionButton: FloatingActionButton(

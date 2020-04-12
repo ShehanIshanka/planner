@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -33,6 +34,7 @@ class _MembersPageState extends State<MembersPage> {
   ConfirmationDialog memberRemovalCheck = new ConfirmationDialog();
   PopUpBox popUpBox = new PopUpBox();
   AnimationController _controller;
+  final ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -59,6 +61,22 @@ class _MembersPageState extends State<MembersPage> {
     members = await _memberController.updateView();
     print(members.getMembers());
     return members.getMembers();
+  }
+
+  bool enableScrollBar(double height, int length) {
+    if (height / 96 < length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  double getHeight(double height, int length) {
+    double h = height - (length + 1 - height / 96) * 96;
+    if (h < 20) {
+      return 20.0;
+    }
+    return h;
   }
 
   @override
@@ -102,84 +120,98 @@ class _MembersPageState extends State<MembersPage> {
                   Text(
                     "No members",
                     style: TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 20),
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
                   ),
                 ],
               ));
             }
             return SafeArea(
-                child: ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-                  child: Card(
-                    child: Container(
-                      child: ListTile(
-                          onTap: () {
-                            popUpBox.showMember(context, snapshot.data[index]);
-                          },
-                          title: Text(
-                            snapshot.data[index].getName(),
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          leading: Container(
-                            padding: EdgeInsets.only(right: 12.0),
-                            decoration: new BoxDecoration(
-                                border: new Border(
-                                    right: new BorderSide(
-                                        width: 1.0, color: Colors.black12))),
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  'assets/${snapshot.data[index].getGender()}.png'),
+                child: DraggableScrollbar.rrect(
+              controller: controller,
+              heightScrollThumb: getHeight(
+                  MediaQuery.of(context).size.height, snapshot.data.length),
+              backgroundColor: Colors.grey[400],
+              alwaysVisibleScrollThumb: enableScrollBar(
+                  MediaQuery.of(context).size.height, snapshot.data.length),
+              child: ListView.builder(
+                controller: controller,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                    child: Card(
+                      child: Container(
+                        child: ListTile(
+                            onTap: () {
+                              popUpBox.showMember(
+                                  context, snapshot.data[index]);
+                            },
+                            title: Text(
+                              snapshot.data[index].getName(),
+                              overflow: TextOverflow.visible,
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          subtitle: Text(snapshot.data[index].getPosition(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontFamily: 'Raleway')),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.grey,
-                                ),
-                                onPressed: () async {
-                                  await _memberController
-                                      .navigateToMemberRegistrationPage(
-                                          context, "edit", snapshot.data[index],
-                                          index: index);
-                                },
+                            leading: Container(
+                              padding: EdgeInsets.only(right: 12.0),
+                              decoration: new BoxDecoration(
+                                  border: new Border(
+                                      right: new BorderSide(
+                                          width: 1.0, color: Colors.black12))),
+                              child: CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    'assets/${snapshot.data[index].getGender()}.png'),
                               ),
-                              IconButton(
+                            ),
+                            subtitle: Text(snapshot.data[index].getPosition(),
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontFamily: 'Raleway')),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
                                   icon: Icon(
-                                    Icons.delete,
+                                    Icons.edit,
                                     color: Colors.grey,
                                   ),
                                   onPressed: () async {
-                                    String action =
-                                        await memberRemovalCheck.confirmDialog(
+                                    await _memberController
+                                        .navigateToMemberRegistrationPage(
                                             context,
-                                            "Remove this member?",
-                                            "This will permanently remove the member");
-                                    print("STATUS IS $action");
-                                    if (action == "ACCEPT") {
-                                      await _memberController
-                                          .removerMember(snapshot.data[index]);
-                                    }
-                                    setState(() {
-                                      if (action == "ACCEPT") {}
-                                    });
-                                  }),
-                            ],
-                          )),
+                                            "edit",
+                                            snapshot.data[index],
+                                            index: index);
+                                  },
+                                ),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () async {
+                                      String action = await memberRemovalCheck
+                                          .confirmDialog(
+                                              context,
+                                              "Remove this member?",
+                                              "This will permanently remove the member");
+                                      print("STATUS IS $action");
+                                      if (action == "ACCEPT") {
+                                        await _memberController.removerMember(
+                                            snapshot.data[index]);
+                                      }
+                                      setState(() {
+                                        if (action == "ACCEPT") {}
+                                      });
+                                    }),
+                              ],
+                            )),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ));
           }),
       floatingActionButton: FloatingActionButton(

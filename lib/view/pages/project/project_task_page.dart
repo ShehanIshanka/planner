@@ -79,110 +79,112 @@ class _ProjectTaskState extends State<ProjectTask> {
         title: new Text("Task Sheet of ${projectMember.getName()}"),
       ),
       body: SafeArea(
-        child: FutureBuilder(
-            future: setTasks(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.data.isEmpty) {
-                return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.note, color: Colors.grey, size: 42.0),
-                    Text(
-                      "No tasks for ${projectMember.getName()}",
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                  ],
-                ));
-              }
-              return SafeArea(
-                  child: Form(
-                key: _formKey,
-                child: ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
+        child: Scrollbar(
+          child: FutureBuilder(
+              future: setTasks(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.data.isEmpty) {
+                  return Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.note, color: Colors.grey, size: 42.0),
+                      Text(
+                        "No tasks for ${projectMember.getName()}",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    ],
+                  ));
+                }
+                return SafeArea(
+                    child: Form(
+                  key: _formKey,
+                  child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
 //                            mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  TextFormField(
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      hintText: 'Maximum word length is 100.',
-                                      labelText: 'Task',
-                                    ),
-                                    controller: initialValue(_tasks[index]),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 2,
-                                    onChanged: (val) => _tasks[index] = val,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: 'Maximum word length is 100.',
+                                        labelText: 'Task',
+                                      ),
+                                      controller: initialValue(_tasks[index]),
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: 2,
+                                      onChanged: (val) => _tasks[index] = val,
 //                                  initialValue: _tasks[index],
-                                    inputFormatters: [
-                                      new LengthLimitingTextInputFormatter(100)
-                                    ],
-                                    validator: (val) =>
-                                        val.isEmpty ? 'Task is required' : null,
-                                    onSaved: (val) => _tasks[index] = val,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Card(
-                                        child: DropdownButtonHideUnderline(
-                                          child: ButtonTheme(
-                                            alignedDropdown: true,
-                                            child: new DropdownButton<String>(
+                                      inputFormatters: [
+                                        new LengthLimitingTextInputFormatter(100)
+                                      ],
+                                      validator: (val) =>
+                                          val.isEmpty ? 'Task is required' : null,
+                                      onSaved: (val) => _tasks[index] = val,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Card(
+                                          child: DropdownButtonHideUnderline(
+                                            child: ButtonTheme(
+                                              alignedDropdown: true,
+                                              child: new DropdownButton<String>(
 //                      isExpanded: true,
-                                              items: dropDownItems
-                                                  .map((String value) {
-                                                return new DropdownMenuItem<
-                                                    String>(
-                                                  value: value,
-                                                  child: new Text(value),
-                                                );
-                                              }).toList(),
-                                              value: selectTaskTime(index),
-                                              hint: new Text("Set task time"),
-                                              onChanged: (val) {
-                                                _tasksTime[index] =
-                                                    double.parse(val);
-                                                setState(() {});
-                                              },
+                                                items: dropDownItems
+                                                    .map((String value) {
+                                                  return new DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: new Text(value),
+                                                  );
+                                                }).toList(),
+                                                value: selectTaskTime(index),
+                                                hint: new Text("Set task time"),
+                                                onChanged: (val) {
+                                                  _tasksTime[index] =
+                                                      double.parse(val);
+                                                  setState(() {});
+                                                },
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Card(
-                                        child: IconButton(
-                                          icon: Icon(Icons.delete_forever),
-                                          onPressed: () async {
-                                            await _tasks.removeAt(index);
-                                            await _tasksTime.removeAt(index);
-                                            setState(() {});
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                        Card(
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete_forever),
+                                            onPressed: () async {
+                                              await _tasks.removeAt(index);
+                                              await _tasksTime.removeAt(index);
+                                              setState(() {});
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-              ));
-            }),
+                            ],
+                          ),
+                        );
+                      }),
+                ));
+              }),
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

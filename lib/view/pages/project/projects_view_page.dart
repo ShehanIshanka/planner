@@ -59,195 +59,200 @@ class _ProjectsViewPageState extends State<ProjectsViewPage> {
         body: new SafeArea(
             top: false,
             bottom: false,
-            child: new ListView(
+            child: Scrollbar(
+              child: new ListView(
 //                mainAxisSize: MainAxisSize.min,
 //                mainAxisAlignment: MainAxisAlignment.center,
 //                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                ),
-                Card(
-                  child: Table(border: new TableBorder(
-                      horizontalInside: new BorderSide(color: Colors.grey[200], width: 0.5)
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
                   ),
-                    children: [
-                      TableRow(children: [
-                        TableCell(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text("Project Duration",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                              Text("Holidays",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                            ],
+                  Card(
+                    child: Table(
+                      border: new TableBorder(
+                          horizontalInside: new BorderSide(
+                              color: Colors.grey[200], width: 0.5)),
+                      children: [
+                        TableRow(children: [
+                          TableCell(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Text("Project Duration",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                                Text("Holidays",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black)),
+                              ],
+                            ),
                           ),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        TableCell(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text(
-                                  "${formatter.format(project.getStartDate())} - ${formatter.format(project.getEndDate())}"),
-                              Text(
-                                  "\n${project.getHolidays().map((T) => formatter.format(T)).join("\n")}\n"),
-                            ],
-                          ),
-                        )
-                      ])
-                    ],
+                        ]),
+                        TableRow(children: [
+                          TableCell(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Text(
+                                    "${formatter.format(project.getStartDate())} - ${formatter.format(project.getEndDate())}"),
+                                Text(
+                                    "\n${project.getHolidays().map((T) => formatter.format(T)).join("\n")}\n"),
+                              ],
+                            ),
+                          )
+                        ])
+                      ],
+                    ),
                   ),
-                ),
-                Column(
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          side: new BorderSide(color: Colors.blue, width: 2.0),
-                          borderRadius: BorderRadius.circular(4.0)),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
+                  Column(
+                    children: <Widget>[
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            side:
+                                new BorderSide(color: Colors.blue, width: 2.0),
+                            borderRadius: BorderRadius.circular(4.0)),
                         child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                              columns: [
-                                DataColumn(
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                        "Members",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      numeric: false,
+                                      tooltip: "Member name"),
+                                  DataColumn(
+                                    label: Center(
+                                      child: Text(
+                                        "Tasks",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    numeric: false,
+                                    tooltip: "Task assigned",
+                                  ),
+                                  DataColumn(
                                     label: Text(
-                                      "Members",
+                                      "Working Days",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     ),
                                     numeric: false,
-                                    tooltip: "Member name"),
-                                DataColumn(
-                                  label: Center(
-                                    child: Text(
-                                      "Tasks",
+                                    tooltip: "Task assigned",
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      "Leaves",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
                                     ),
+                                    numeric: false,
+                                    tooltip: "Personal holidays",
                                   ),
-                                  numeric: false,
-                                  tooltip: "Task assigned",
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    "Working Days",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                  numeric: false,
-                                  tooltip: "Task assigned",
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    "Leaves",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                  numeric: false,
-                                  tooltip: "Personal holidays",
-                                ),
-                              ],
-                              rows: project
-                                  .getProjectMembers()
-                                  .map((projectMember) => DataRow(cells: [
-                                        DataCell(Text(projectMember.getName()),
-                                            showEditIcon: false),
-                                        DataCell(
-                                          SingleChildScrollView(
-                                            child: Column(
-                                              children: List.generate(
-                                                  projectMember
-                                                      .getTasks()
-                                                      .length,
-                                                  (index) => Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              child: Text(
-                                                                  "${projectMember
-                                                                      .getTasks()[
-                                                                  index]} ",
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .visible),
-                                                            ),
-                                                            Container(
-                                                              child: Text(
+                                ],
+                                rows: project
+                                    .getProjectMembers()
+                                    .map((projectMember) => DataRow(cells: [
+                                          DataCell(
+                                              Text(projectMember.getName()),
+                                              showEditIcon: false),
+                                          DataCell(
+                                            SingleChildScrollView(
+                                              child: Column(
+                                                children: List.generate(
+                                                    projectMember
+                                                        .getTasks()
+                                                        .length,
+                                                    (index) => Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: <Widget>[
+                                                              Container(
+                                                                child: Text(
+                                                                    "${projectMember.getTasks()[index]} ",
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .visible),
+                                                              ),
+                                                              Container(
+                                                                child: Text(
+                                                                    projectMember
+                                                                            .getTasksTime()[
+                                                                                index]
+                                                                            .toString() +
+                                                                        " days",
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .visible),
+                                                              ),
+                                                            ])).toList(),
+                                              ),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            new LinearPercentIndicator(
+                                              width: 50.0,
+                                              lineHeight: 14.0,
+                                              percent:
+                                                  setTasksTime(projectMember),
+                                              center: Text(
+                                                projectMember
+                                                        .getTasksTime()
+                                                        .fold(
+                                                            0, (p, c) => p + c)
+                                                        .toString() +
+                                                    " days",
+                                                style: new TextStyle(
+                                                    fontSize: 12.0),
+                                              ),
+                                              backgroundColor: Colors.grey,
+                                              progressColor: Colors.blue,
+                                              trailing: Text(setWorkingDays(
+                                                  projectMember)),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            SingleChildScrollView(
+                                              child: Column(
+                                                children: List.generate(
+                                                    projectMember
+                                                        .getLeaves()
+                                                        .length,
+                                                    (index) => Container(
+                                                          child: Text(
+                                                              formatter.format(
                                                                   projectMember
-                                                                          .getTasksTime()[
-                                                                              index]
-                                                                          .toString() +
-                                                                      " days",
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .visible),
-                                                            ),
-                                                          ])).toList(),
+                                                                          .getLeaves()[
+                                                                      index]),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .visible),
+                                                        )).toList(),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        DataCell(
-                                          new LinearPercentIndicator(
-                                            width: 50.0,
-                                            lineHeight: 14.0,
-                                            percent:
-                                                setTasksTime(projectMember),
-                                            center: Text(
-                                              projectMember
-                                                      .getTasksTime()
-                                                      .fold(0, (p, c) => p + c)
-                                                      .toString() +
-                                                  " days",
-                                              style:
-                                                  new TextStyle(fontSize: 12.0),
-                                            ),
-                                            backgroundColor: Colors.grey,
-                                            progressColor: Colors.blue,
-                                            trailing: Text(
-                                                setWorkingDays(projectMember)),
-                                          ),
-                                        ),
-                                        DataCell(
-                                          SingleChildScrollView(
-                                            child: Column(
-                                              children: List.generate(
-                                                  projectMember
-                                                      .getLeaves()
-                                                      .length,
-                                                  (index) => Container(
-                                                        child: Text(
-                                                            formatter.format(projectMember
-                                                                .getLeaves()[
-                                                                    index]),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .visible),
-                                                      )).toList(),
-                                            ),
-                                          ),
-                                        )
-                                      ]))
-                                  .toList()),
+                                          )
+                                        ]))
+                                    .toList()),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             )));
   }
 }

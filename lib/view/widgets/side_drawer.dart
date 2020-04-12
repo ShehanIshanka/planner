@@ -12,9 +12,7 @@ class SideDrawer extends StatelessWidget {
           children: <Widget>[
             DrawerHeader(
               child: Center(
-                child: new Image.asset(
-                  'assets/drawer.png'
-                ),
+                child: new Image.asset('assets/drawer.png'),
               ),
               margin: EdgeInsets.zero,
               decoration: BoxDecoration(
@@ -44,6 +42,14 @@ class SideDrawer extends StatelessWidget {
               onTap: () {
 //                Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, "/instructions");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('About'),
+              onTap: () {
+//                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, "/about");
               },
             ),
           ],

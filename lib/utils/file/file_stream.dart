@@ -19,8 +19,8 @@ class FileStream {
       // Read the file
       String contents = await file.readAsString();
       // Returning the contents of the file
-      print("FIle Reading :" + filename);
-      print("Contents :" + contents);
+//      print("FIle Reading :" + filename);
+//      print("Contents :" + contents);
 
       return contents;
     } catch (e) {
@@ -43,8 +43,8 @@ class FileStream {
         file.create(recursive: true);
       }
     });
-    print("File Name writing:" + filename);
-    print("Contents writing:" + data);
+//    print("File Name writing:" + filename);
+//    print("Contents writing:" + data);
     file.writeAsString('$data');
   }
 

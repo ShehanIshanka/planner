@@ -60,30 +60,6 @@ class _ProjectsPageState extends State<ProjectsPage> {
     super.dispose();
   }
 
-  void test() {
-    Projects projects = new Projects();
-    List<Project> projectList = new List();
-    ProjectMember projectMember = new ProjectMember();
-
-    projectMember.setName("exampleMemeber");
-    projectMember.setLeaves([new DateTime.now()]);
-    projectMember.setTasks(["example task"]);
-    projectMember.setTasksTime([2]);
-
-    for (int i = 1000; i < 1002; i++) {
-      Project project = new Project();
-      project.setProjectName(i.toString());
-      project.setHolidays([new DateTime.now()]);
-      project.setProjectMembers([projectMember]);
-      project.setChanged(true);
-      project.setFilename(i.toString() + ".txt");
-      projectList.add(project);
-    }
-    projects.setProjects(projectList);
-    ProjectsJsonEncoder().encode(projects);
-    setState(() {});
-  }
-
   bool enableScrollBar(double height, int length) {
     if (height / 96 < length) {
       return true;
@@ -102,9 +78,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
 
   Future<List> setProjects() async {
     projects = await _projectController.updateView();
-    print("data/");
-    print(projects.getProjects());
-    print("data/");
+//    print("data/");
+//    print(projects.getProjects());
+//    print("data/");
     return projects.getProjects();
   }
 
@@ -266,7 +242,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                               context,
                                               "Remove this project?",
                                               "This will permanently remove the member");
-                                      print("STATUS IS $action");
+//                                      print("STATUS IS $action");
                                       if (action == "ACCEPT") {
                                         await _projectController.removeProject(
                                             snapshot.data[index]);

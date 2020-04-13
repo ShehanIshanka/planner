@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ConfirmationDialog {
   Future<String> confirmDialog(
       BuildContext context, String title, String message) async {
-    print(context.toString());
+//    print(context.toString());
     String state;
     return showDialog<String>(
       context: context,

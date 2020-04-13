@@ -119,7 +119,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
       setState(() {});
       _messageBox.showMessage(
           'Please set holidays, leaves and task times.', _scaffoldKey);
-      print('Project Duration Range : $picked');
+//      print('Project Duration Range : $picked');
     }
   }
 
@@ -130,7 +130,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
     if (action == "OK") {
       selectedDates = output[1];
       selectedDates.sort((a, b) => a.compareTo(b));
-      print(selectedDates);
+//      print(selectedDates);
       project.setHolidays(selectedDates);
       for (ProjectMember currentProjectMember in project.getProjectMembers()) {
         currentProjectMember.setLeaves(currentProjectMember
@@ -149,14 +149,13 @@ class _ProjectRegistration extends State<ProjectRegistration> {
       _messageBox.showMessage(
           'Please check leaves and task times of added project members',
           _scaffoldKey);
-      print('Holidays selected : $selectedDates');
+//      print('Holidays selected : $selectedDates');
     }
   }
 
   Future selectLeaves(BuildContext context, ProjectMember projectMember) async {
     List<DateTime> selectedLeaves = project.getHolidays();
-    print(
-        'Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
+//    print('Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
     List output = await PopUpBoxCalender().popUpCalender(context, dateRange,
         selectedLeaves + projectMember.getLeaves(), selectedLeaves);
     String action = output[0];
@@ -174,8 +173,7 @@ class _ProjectRegistration extends State<ProjectRegistration> {
             .toList());
       });
       _messageBox.showMessage('Please check task times', _scaffoldKey);
-      print(
-          'Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
+//      print('Leaves selected for ${projectMember.getName()} : ${projectMember.getLeaves()}');
     }
   }
 

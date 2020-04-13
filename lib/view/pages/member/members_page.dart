@@ -59,7 +59,7 @@ class _MembersPageState extends State<MembersPage> {
 
   Future<List> setMembers() async {
     members = await _memberController.updateView();
-    print(members.getMembers());
+//    print(members.getMembers());
     return members.getMembers();
   }
 
@@ -196,7 +196,7 @@ class _MembersPageState extends State<MembersPage> {
                                               context,
                                               "Remove this member?",
                                               "This will permanently remove the member");
-                                      print("STATUS IS $action");
+//                                      print("STATUS IS $action");
                                       if (action == "ACCEPT") {
                                         await _memberController.removerMember(
                                             snapshot.data[index]);
